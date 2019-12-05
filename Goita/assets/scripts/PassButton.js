@@ -27,7 +27,6 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -35,14 +34,12 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        
+
     },
 
-    addPieceToBoard(isFlipped, piece) {
-        // if isFlipped
-        // add flipped piece to board
-        // else
-        // add open piece to board
+    pass () {
+        // add GameManager's pass counter
+        // go to next turn
     }
 
     // update (dt) {},

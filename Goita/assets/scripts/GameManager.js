@@ -32,21 +32,26 @@ cc.Class({
             type :cc.Node
         },
         kingHasDefended: false,
-        lastAttackPiece,
+        lastAttackPiece: {
+            default: null,
+            // TODO: not actually node, but rather PIECE information (is this node?)
+            type: cc.Node
+        },
         x: 0
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        //this.teamOne = [player[0] , player[2]];
-        //this.teamTwo = [player[1] , player[3]];
         this.deck = [];
         this.currentPlayer;
         this.lastAttackPlayer;
+        this.passCounter = 0;
     },
 
     start () {
+        shuffleDeck();
+        chooseFirstPlayer();
     },
 
     shuffleDeck(){
@@ -62,15 +67,22 @@ cc.Class({
         }
     },
 
-    chooseRandomFirstPlayer(){
+    chooseFirstPlayer(){
         this.firstPlayerIndex = Math.floor((Math.random() * this.player.length));
-        //call firstplayer turn method
+        player[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         this.currentPlayerIndex = this.firstPlayerIndex;
     },
 
-    advanceTurn(){
+    advanceTurn(attackPiece){
+        this.lastAttackPiece = attackPiece;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 3;
-        // call next player turn method
+        // if pass counter is 3 or more,
+        // start player turn with isFlipped true
+        player[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
+    },
+
+    addPassCounter() {
+        this.passCounter++;
     }
 
     //update (dt) {},

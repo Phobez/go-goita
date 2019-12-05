@@ -30,30 +30,77 @@ cc.Class({
         hand: {
             default: [],
             type: cc.Node
+        },
+        board: {
+            default: null,
+            type: cc.Node
+        },
+        gameManager: {
+            default: null,
+            type: cc.Node
         }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-
+    onLoad () {
+        this.isFlipped = false;
     },
 
-    playerTurn(isFirst, lastAttackingPiece){
-        if(isFirst){
-            // enable all pieces
+    start () {
+        
+    },
 
-        }else{
+    startPlayerTurn(isFlipped, lastAttackPiece) {
+        this.isFlipped = isFlipped;
+        this.lastAttackPiece = lastAttackPiece;
+        if(isFlipped){
+            // check if there's only two pieces left in hand AND they're both kings
+            // isFlipped is false
+            // enable all pieces
+            
+        } else {
+            this.isDefending = true;
+            checkPieceAvailability(this.isDefending);
+            // if no matching piece, tell player, enable only pass button
+        }
+    },
+
+    putPiece(piece) {
+        // put piece on board
+        // call Board's add piece function
+        // board.getComponent('Board').pieces.push(piece);
+        // remove piece from hand
+        for (var i = 0; i < hand.length; i++) {
+            if (hand[i] === piece) {
+                if (!this.isDefending) {
+                    this.attackPiece = hand[i];
+                }
+                hand.splice(i, 1);
+                break;
+            }
+        }
+        if (this.isDefending) {
+            checkPieceAvailability(false);
+            this.isDefending = false;
+        } else {
+            gameManager.getComponent('GameManager').advanceTurn(this.attackPiece);
+        }
+    },
+
+    checkPieceAvailability(isDefending) {
+        if (isDefending) {
             for(var i = 0; i < hand.length; i++){
-                if(hand[i].getComponent('Piece').type !== lastAttackingPiece.type){
+                if(hand[i].getComponent('Piece').type !== this.lastAttackPiece.type){
                     hand[i].getComponent('Button').interactable = false;
                 }
             }
-            // if no matching piece, tell player, enable only pass button
+        } else {
+            for(var i = 0; i < hand.length; i++){
+                // TODO: add checking for KING
+                hand[i].getComponent('Button').interactable = true;
+            }
         }
-        
     }
 
     // update (dt) {},

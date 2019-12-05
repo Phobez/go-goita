@@ -28,7 +28,11 @@ cc.Class({
         //     }
         // },
         scoreValue: 0,
-        type: ''
+        type: '',
+        player: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -38,6 +42,10 @@ cc.Class({
     start () {
 
     },
+
+    sendToBoard() {
+        player.putPiece(this);
+    }
 
     // update (dt) {},
 });
