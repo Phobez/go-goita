@@ -51,7 +51,7 @@ cc.Class({
         if(isFlipped){
             //needed to be flipped
             this.flippedPiece = null;
-            this.boardPieces.push(this.flippedPiece);
+            this.pieces.push(this.flippedPiece);
         }
         // else
         // add open piece to board
@@ -60,7 +60,7 @@ cc.Class({
             if(! gameManager.getComponent('GameManager').kingHasDefended){
                 gameManager.getComponent('GameManager').kingHasDefended = true;
             }
-            this.boardPieces.push(piece);
+            this.pieces.push(piece);
         }
     }
 
