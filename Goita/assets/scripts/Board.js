@@ -27,12 +27,19 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-
+        gameManager: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.pieces = [];
+        //placeholder change it later to actual flipped piece asset
+        this.flippedPiece = 1;
+    },
 
     start () {
         
@@ -41,8 +48,20 @@ cc.Class({
     addPieceToBoard(isFlipped, piece) {
         // if isFlipped
         // add flipped piece to board
+        if(isFlipped){
+            //needed to be flipped
+            this.flippedPiece = null;
+            this.boardPieces.push(this.flippedPiece);
+        }
         // else
         // add open piece to board
+        else{
+            //check if king used for defend or not
+            if(! gameManager.getComponent('GameManager').kingHasDefended){
+                gameManager.getComponent('GameManager').kingHasDefended = true;
+            }
+            this.boardPieces.push(piece);
+        }
     }
 
     // update (dt) {},

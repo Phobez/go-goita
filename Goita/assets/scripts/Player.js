@@ -56,7 +56,14 @@ cc.Class({
         this.lastAttackPiece = lastAttackPiece;
         if(isFlipped){
             // check if there's only two pieces left in hand AND they're both kings
+            if(hand.length == 2)
+            {
+                if(hand[0] == Node.name('king') && hand[1] == Node.name('king')){
+                    //ask to win the round by takeout 2 kings or pass
+                }
+            }
             // isFlipped is false
+            this.isFlipped = false;
             // enable all pieces
             
         } else {
@@ -91,14 +98,26 @@ cc.Class({
     checkPieceAvailability(isDefending) {
         if (isDefending) {
             for(var i = 0; i < hand.length; i++){
+                //Todo : Check king special condition in defending
                 if(hand[i].getComponent('Piece').type !== this.lastAttackPiece.type){
                     hand[i].getComponent('Button').interactable = false;
                 }
             }
         } else {
             for(var i = 0; i < hand.length; i++){
-                // TODO: add checking for KING
-                hand[i].getComponent('Button').interactable = true;
+                // added check for KING
+                if(gameManager.getComponent('GameManager').kingHasDefended){
+                    hand[i].getComponent('Button').interactable = true;
+                }
+                else{
+                    if(hand[i].getComponent('Piece').type == 'King'){
+                        hand[i].getComponent('Button').interactable = false;
+                    }
+                    else{
+                        hand[i].getComponent('Button').interactable = true;
+                    }
+                }
+                
             }
         }
     }

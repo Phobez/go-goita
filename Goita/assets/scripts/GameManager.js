@@ -78,6 +78,9 @@ cc.Class({
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 3;
         // if pass counter is 3 or more,
         // start player turn with isFlipped true
+        if(passCounter == 3){
+            player[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+        }
         player[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
     },
 
