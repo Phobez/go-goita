@@ -62,6 +62,15 @@ cc.Class({
             }
             this.pieces.push(piece);
         }
+
+        if (this.pieces.length >= 8) {
+            if (isFlipped) {
+                gameManager.getComponent('GameManager').endRound(this, this.pieces[7]);
+            } else {
+                gameManager.getComponent('GameManager').endRound(this, this.piece[6], this.pieces[7]);
+            }
+            
+        }
     }
 
     // update (dt) {},

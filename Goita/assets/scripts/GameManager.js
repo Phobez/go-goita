@@ -27,9 +27,9 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        player: {
+        players: {
             default: [],
-            type :cc.Node
+            type: cc.Node
         },
         kingHasDefended: false,
         lastAttackPiece: {
@@ -47,6 +47,8 @@ cc.Class({
         this.currentPlayer;
         this.lastAttackPlayer;
         this.passCounter = 0;
+        this.teamAScore = 0;
+        this.teamBScore = 0;
     },
 
     start () {
@@ -55,21 +57,22 @@ cc.Class({
     },
 
     shuffleDeck(){
+        // TODO: fill deck
         this.deck = [];
         var index = 0;
         for(var i = 0; i < 4; i++){
             for(var j = 0; j < 8;j++){
                 var random = Math.floor((Math.random() * this.deck.length));
                 var randomPiece = this.deck[random];
-                this.player[i].hand.push(this.randomPiece);
+                this.players[i].hand.push(this.randomPiece);
                 this.deck.splice(this.randomPiece,1);
             }
         }
     },
 
     chooseFirstPlayer(){
-        this.firstPlayerIndex = Math.floor((Math.random() * this.player.length));
-        player[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+        this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         this.currentPlayerIndex = this.firstPlayerIndex;
     },
 
@@ -78,14 +81,114 @@ cc.Class({
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 3;
         // if pass counter is 3 or more,
         // start player turn with isFlipped true
-        if(passCounter == 3){
-            player[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+        if(this.passCounter == 3){
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         }
-        player[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
+        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
     },
 
     addPassCounter() {
         this.passCounter++;
+    },
+
+    startRound() {
+        shuffleDeck();
+        this.lastAttackPiece = null;
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+    },
+
+    endRound(roundWinner, lastPiece) {
+        var roundPoints = 0;
+
+        // get points according to last piece type
+        switch (lastPiece.getComponent('Piece').type) {
+            case 'king':
+                roundPoints = 50;
+                break;
+            case 'rook':
+            case 'bishop':
+                roundPoints = 40;
+                break;
+            case 'gold general':
+            case 'silver general':
+                roundPoints = 30;
+                break;
+            case 'knight':
+            case 'lance':
+                roundPoints = 20;
+                break;
+            case 'pawn':
+                roundPoints = 10;
+                break;
+        }
+
+        // find out which team round winner belongs to
+        for (var i = 0; i < this.players.length; i++) {
+            if (roundWinner === this.players[i]) {
+                if (i % 2 == 0) {
+                    this.teamAScore += roundPoints;
+                } else {
+                    this.teamBScore += roundPoints;
+                }
+                break;
+            }
+        }
+
+        this.checkPoints();
+    },
+
+    endRound(roundWinner, secondLastPiece, lastPiece) {
+        // if two last pieces are same piece
+        // get double points
+        if (secondLastPiece.getComponent('Piece').type === lastPiece.getComponent('Piece').type) {
+            var roundPoints = 0;
+
+            // get points according to last piece type
+            switch (lastPiece.getComponent('Piece').type) {
+                case 'king':
+                    roundPoints = 100;
+                    break;
+                case 'rook':
+                case 'bishop':
+                    roundPoints = 80;
+                    break;
+                case 'gold general':
+                case 'silver general':
+                    roundPoints = 60;
+                    break;
+                case 'knight':
+                case 'lance':
+                    roundPoints = 40;
+                    break;
+                case 'pawn':
+                    roundPoints = 20;
+                    break;
+            }
+
+            // find out which team round winner belongs to
+            for (var i = 0; i < this.players.length; i++) {
+                if (roundWinner === this.players[i]) {
+                    if (i % 2 == 0) {
+                        this.teamAScore += roundPoints;
+                    } else {
+                        this.teamBScore += roundPoints;
+                    }
+                    break;
+                }
+            }
+
+            this.checkPoints();
+        } else {
+            this.endRound(roundWinner, lastPiece);
+        }
+    },
+
+    checkPoints() {
+        if (this.teamAScore >= 100 || this.teamBScore >= 100) {
+            // end game
+        } else {
+            this.startRound();
+        }
     }
 
     //update (dt) {},
