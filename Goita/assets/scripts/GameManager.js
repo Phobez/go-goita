@@ -36,13 +36,13 @@ cc.Class({
             default: null,
             // TODO: not actually node, but rather PIECE information (is this node?)
             type: cc.Node
-        },
-        x: 0
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        // init
         this.deck = [];
         this.currentPlayer;
         this.lastAttackPlayer;
@@ -52,36 +52,82 @@ cc.Class({
     },
 
     start () {
-        shuffleDeck();
-        chooseFirstPlayer();
+        this.shuffleDeck();
+        this.chooseFirstPlayer();
     },
 
-    shuffleDeck(){
-        // TODO: fill deck
-        this.deck = [];
-        var index = 0;
-        for(var i = 0; i < 4; i++){
-            for(var j = 0; j < 8;j++){
-                var random = Math.floor((Math.random() * this.deck.length));
-                var randomPiece = this.deck[random];
-                this.players[i].hand.push(this.randomPiece);
-                this.deck.splice(this.randomPiece,1);
+    shuffleDeck () {
+        this.fillDeck();
+        
+        // go through all players
+        for(var i = 0; i < 4; i++) {
+            this.players[i].setPlayerToHand();
+            // give each player 8 pieces
+            for(var j = 0; j < 8; j++) {
+                // choose random piece from deck
+                var randomIndex = Math.floor((Math.random() * this.deck.length));
+                var randomPieceType = this.deck[randomIndex];
+                this.players[i].addPieceToHand(randomPieceType);
+                this.deck.splice(randomIndex, 1);
             }
         }
     },
 
-    chooseFirstPlayer(){
+    fillDeck () {
+        // fill pawns
+        for (var i = 0; i < 10; i++) {
+            this.deck.push('pawn');
+        }
+
+        // fill knights
+        for (var i = 0; i < 4; i++) {
+            this.deck.push('knight');
+        }
+
+        // fill lances
+        for (var i = 0; i < 4; i++) {
+            this.deck.push('lance');
+        }
+
+        // fill silver generals
+        for (var i = 0; i < 4; i++) {
+            this.deck.push('silver general');
+        }
+
+        // fill gold generals
+        for (var i = 0; i < 4; i++) {
+            this.deck.push('gold general');
+        }
+
+        // fill bishops
+        for (var i = 0; i < 2; i++) {
+            this.deck.push('bishop');
+        }
+
+        // fill rooks
+        for (var i = 0; i < 2; i++) {
+            this.deck.push('rook');
+        }
+
+        // fill kings
+        for (var i = 0; i < 2; i++) {
+            this.deck.push('king');
+        }
+    },
+
+    chooseFirstPlayer () {
+        // choose a random player to start the game
         this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         this.currentPlayerIndex = this.firstPlayerIndex;
     },
 
-    advanceTurn(attackPiece){
-        this.lastAttackPiece = attackPiece;
+    advanceTurn (attackPieceType) {
+        this.lastAttackPieceType = attackPieceType;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 3;
         // if pass counter is 3 or more,
         // start player turn with isFlipped true
-        if(this.passCounter == 3){
+        if (this.passCounter == 3) {
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         }
         this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
@@ -140,7 +186,7 @@ cc.Class({
     endRound(roundWinner, secondLastPiece, lastPiece) {
         // if two last pieces are same piece
         // get double points
-        if (secondLastPiece.getComponent('Piece').type === lastPiece.getComponent('Piece').type) {
+        if (secondLastPiece === lastPiece) {
             var roundPoints = 0;
 
             // get points according to last piece type
@@ -188,6 +234,16 @@ cc.Class({
             // end game
         } else {
             this.startRound();
+        }
+    },
+
+    endGame() {
+        if (this.teamAScore > this.teamBScore) {
+            // team A wins
+        } else if (this.teamAScore < this.teamBScore) {
+            // team B wins
+        } else {
+            // draw
         }
     }
 

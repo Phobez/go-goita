@@ -30,44 +30,106 @@ cc.Class({
         gameManager: {
             default: null,
             type: cc.Node
+        },
+        pieces: {
+            default: [],
+            type: cc.Sprite
+        },
+        flippedPieceSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        kingSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        rookSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        bishopSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        goldGeneralSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        silverGeneralSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        knightSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        lanceSprite: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        pawnSprite: {
+            default: null,
+            type: cc.SpriteFrame
         }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.pieces = [];
-        //placeholder change it later to actual flipped piece asset
-        this.flippedPiece = 1;
+        this.pieceCounter = 0;
+        this.pieceTypes = [];
     },
 
     start () {
         
     },
 
-    addPieceToBoard(isFlipped, piece) {
+    addPieceToBoard(isFlipped, pieceType) {
         // if isFlipped
         // add flipped piece to board
-        if(isFlipped){
-            //needed to be flipped
-            this.flippedPiece = null;
-            this.pieces.push(this.flippedPiece);
-        }
         // else
         // add open piece to board
-        else{
-            //check if king used for defend or not
-            if(! gameManager.getComponent('GameManager').kingHasDefended){
-                gameManager.getComponent('GameManager').kingHasDefended = true;
+        if (isFlipped) {
+            this.pieces[this.pieceCounter].spriteFrame = flippedPieceSprite;
+            this.pieceTypes.push('');
+        } else {
+            switch (pieceType) {
+                case 'king':
+                    this.pieces[this.pieceCounter].spriteFrame = this.kingSprite;
+                    break;
+                case 'rook':
+                    this.pieces[this.pieceCounter].spriteFrame = this.rookSprite;
+                    break;
+                case 'bishop':
+                    this.pieces[this.pieceCounter].spriteFrame = this.bishopSprite;
+                    break;
+                case 'gold general':
+                    this.pieces[this.pieceCounter].spriteFrame = this.goldGeneralSprite;
+                    break;
+                case 'silver general':
+                    this.pieces[this.pieceCounter].spriteFrame = this.silverGeneralSprite;
+                    break;
+                case 'knight':
+                    this.pieces[this.pieceCounter].spriteFrame = this.knightSprite;
+                    break;
+                case 'lance':
+                    this.pieces[this.pieceCounter].spriteFrame = this.lanceSprite;
+                    break;
+                case 'pawn':
+                    this.pieces[this.pieceCounter].spriteFrame = this.pawnSprite;
+                    break;
             }
-            this.pieces.push(piece);
+            this.pieceTypes.push(pieceType);
         }
 
-        if (this.pieces.length >= 8) {
+        this.pieceCounter++;
+
+        if (this.pieceCounter >= 7) {
+            this.pieceCounter = 0;
             if (isFlipped) {
-                gameManager.getComponent('GameManager').endRound(this, this.pieces[7]);
+                gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[7]);
             } else {
-                gameManager.getComponent('GameManager').endRound(this, this.piece[6], this.pieces[7]);
+                gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[6], this.pieceTypes[7]);
             }
             
         }
