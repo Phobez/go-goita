@@ -27,10 +27,17 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        pieceType: '',
-        handBoard: {
+        player: {
             default: null,
             type: cc.Node
+        },
+        pieces: {
+            default: [],
+            type: cc.Node
+        },
+        flippedPieceSprite: {
+            default: null,
+            type: cc.SpriteFrame
         },
         kingSprite: {
             default: null,
@@ -68,53 +75,50 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-        this.spriteComponent = this.node.getChildByName('Background').getComponent(cc.Sprite);
+    onLoad () {
+        this.hasFilledHand = false;
     },
 
-    setHandPiece(pieceType) {
-        // sets piece type
-        this.pieceType = pieceType;
-        // shows appropriate sprite
-        switch (pieceType) {
-            case 'king':
-                this.spriteComponent.spriteFrame = this.kingSprite;
-                break;
-            case 'rook':
-                this.spriteComponent.spriteFrame = this.rookSprite;
-                break;
-            case 'bishop':
-                this.spriteComponent.spriteFrame = this.bishopSprite;
-                break;
-            case 'gold':
-                this.spriteComponent.spriteFrame = this.goldGeneralSprite;
-                break;
-            case 'silver':
-                this.spriteComponent.spriteFrame = this.silverGeneralSprite;
-                break;
-            case 'knight':
-                this.spriteComponent.spriteFrame = this.knightSprite;
-                break;
-            case 'lance':
-                this.spriteComponent.spriteFrame = this.lanceSprite;
-                break;
-            case 'pawn':
-                this.spriteComponent.spriteFrame = this.pawnSprite;
-                break;
-            default:
-                this.spriteComponent.spriteFrame = null;
-                break;
+    start () {
+
+    },
+
+    update (dt) {
+        if (!(this.hasFilledHand) && this.player.getComponent('Player').handHasBeenFilled) {
+            this.fillBoard();
+            this.hasFilledHand = true;
         }
     },
 
-    sendToBoard () {
-        this.handBoard.getComponent('HandBoard').removePiece(this.node);
-        // this.player.getComponent('Player').putPiece(this.pieceType);
-        this.setHandPiece('');
-        this.getComponent(cc.Button).interactable = false;
+    fillBoard () {
+        for (var i = 0; i < 8; i++) {
+            var pieceType = this.player.getComponent('Player').hand[i];
+            this.pieces[i].getComponent('HandPiece').setHandPiece(pieceType);
+        }
     },
 
-    // update (dt) {},
+    removePiece(piece) {
+        // var pieceIndex = 0;
+        // for (var i = 0; i < 8; i++) {
+        //     if (piece === this.pieces[i]) {
+        //         pieceIndex = i;
+        //         break;
+        //     }
+        // }
+        this.player.getComponent('Player').putPiece(piece.getComponent('HandPiece').pieceType);
+    },
+
+    deactivatePiece(index) {
+        this.pieces[index].getComponent(cc.Button).interactable = false;
+    },
+
+    activatePiece(index) {
+        this.pieces[index].getComponent(cc.Button).interactable = true;
+    },
+
+    deactivateAllPieces() {
+        for (var i = 0; i < 8; i++) {
+            this.pieces[i].getComponent(cc.Button).interactable = false;
+        }
+    }
 });

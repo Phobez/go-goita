@@ -90,7 +90,7 @@ cc.Class({
         // else
         // add open piece to board
         if (isFlipped) {
-            this.pieces[this.pieceCounter].spriteFrame = flippedPieceSprite;
+            this.pieces[this.pieceCounter].spriteFrame = this.flippedPieceSprite;
             this.pieceTypes.push('');
         } else {
             switch (pieceType) {
@@ -103,10 +103,10 @@ cc.Class({
                 case 'bishop':
                     this.pieces[this.pieceCounter].spriteFrame = this.bishopSprite;
                     break;
-                case 'gold general':
+                case 'gold':
                     this.pieces[this.pieceCounter].spriteFrame = this.goldGeneralSprite;
                     break;
-                case 'silver general':
+                case 'silver':
                     this.pieces[this.pieceCounter].spriteFrame = this.silverGeneralSprite;
                     break;
                 case 'knight':
@@ -124,12 +124,12 @@ cc.Class({
 
         this.pieceCounter++;
 
-        if (this.pieceCounter >= 7) {
+        if (this.pieceCounter > 7) {
             this.pieceCounter = 0;
             if (isFlipped) {
-                gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[7]);
+                this.gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[7]);
             } else {
-                gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[6], this.pieceTypes[7]);
+                this.gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[6], this.pieceTypes[7]);
             }
             
         }

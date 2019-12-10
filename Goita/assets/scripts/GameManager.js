@@ -61,13 +61,13 @@ cc.Class({
         
         // go through all players
         for(var i = 0; i < 4; i++) {
-            this.players[i].setPlayerToHand();
+            // this.players[i].getComponent('Player').setPlayerToHand();
             // give each player 8 pieces
             for(var j = 0; j < 8; j++) {
                 // choose random piece from deck
                 var randomIndex = Math.floor((Math.random() * this.deck.length));
                 var randomPieceType = this.deck[randomIndex];
-                this.players[i].addPieceToHand(randomPieceType);
+                this.players[i].getComponent('Player').addPieceToHand(randomPieceType);
                 this.deck.splice(randomIndex, 1);
             }
         }
@@ -91,12 +91,12 @@ cc.Class({
 
         // fill silver generals
         for (var i = 0; i < 4; i++) {
-            this.deck.push('silver general');
+            this.deck.push('silver');
         }
 
         // fill gold generals
         for (var i = 0; i < 4; i++) {
-            this.deck.push('gold general');
+            this.deck.push('gold');
         }
 
         // fill bishops
@@ -117,7 +117,9 @@ cc.Class({
 
     chooseFirstPlayer () {
         // choose a random player to start the game
-        this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
+        // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
+        // TEMPORARY:
+        this.firstPlayerIndex = 0;
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
         this.currentPlayerIndex = this.firstPlayerIndex;
     },
@@ -138,7 +140,7 @@ cc.Class({
     },
 
     startRound() {
-        shuffleDeck();
+        this.shuffleDeck();
         this.lastAttackPiece = null;
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
     },
@@ -155,8 +157,8 @@ cc.Class({
             case 'bishop':
                 roundPoints = 40;
                 break;
-            case 'gold general':
-            case 'silver general':
+            case 'gold':
+            case 'silver':
                 roundPoints = 30;
                 break;
             case 'knight':
@@ -190,7 +192,7 @@ cc.Class({
             var roundPoints = 0;
 
             // get points according to last piece type
-            switch (lastPiece.getComponent('Piece').type) {
+            switch (lastPiece) {
                 case 'king':
                     roundPoints = 100;
                     break;
@@ -198,8 +200,8 @@ cc.Class({
                 case 'bishop':
                     roundPoints = 80;
                     break;
-                case 'gold general':
-                case 'silver general':
+                case 'gold':
+                case 'silver':
                     roundPoints = 60;
                     break;
                 case 'knight':

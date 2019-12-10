@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Piece 8",
+    "_name": "Piece 1",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -54,8 +54,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 180,
-      "y": -60,
+      "x": -180,
+      "y": 60,
       "z": 0
     },
     "_scale": {
@@ -138,7 +138,7 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "Background<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 2
@@ -251,12 +251,10 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": {
-      "__id__": 1
-    },
+    "target": null,
     "component": "",
-    "_componentId": "4492arymbxCmKtVKyQQA9To",
-    "handler": "sendToBoard",
+    "_componentId": "",
+    "handler": "",
     "customEventData": ""
   },
   {
@@ -268,15 +266,31 @@
     },
     "_enabled": true,
     "pieceType": "",
-    "player": null,
-    "kingSprite": null,
-    "rookSprite": null,
-    "bishopSprite": null,
-    "goldGeneralSprite": null,
-    "silverGeneralSprite": null,
-    "knightSprite": null,
-    "lanceSprite": null,
-    "pawnSprite": null,
+    "handBoard": null,
+    "kingSprite": {
+      "__uuid__": "e7aba14b-f956-4480-b254-8d57832e273f"
+    },
+    "rookSprite": {
+      "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
+    },
+    "bishopSprite": {
+      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+    },
+    "goldGeneralSprite": {
+      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
+    },
+    "silverGeneralSprite": {
+      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+    },
+    "knightSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "lanceSprite": {
+      "__uuid__": "7168db62-0edc-42e5-be5d-682cf6c4a165"
+    },
+    "pawnSprite": {
+      "__uuid__": "90004ad6-2f6d-40e1-93ef-b714375c6f06"
+    },
     "_id": ""
   },
   {

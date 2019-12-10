@@ -27,15 +27,17 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        // hand: {
-        //     default: [],
-        //     type: cc.Node
-        // },
+        hand: [],
         board: {
             default: null,
             type: cc.Node
         },
         gameManager: {
+            default: null,
+            type: cc.Node
+        },
+        handHasBeenFilled: false,
+        handBoard: {
             default: null,
             type: cc.Node
         }
@@ -44,41 +46,48 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.isFlipped = false;
+        this.hand = [];
+        this.isDefending = true;
     },
 
     start () {
         this.pieceCounter = 0;
+        
     },
 
-    setPlayerToHand() {
-        for (var i = 0; i < this.hand.length; i++) {
-            this.hand[i].getComponent('HandPiece').player = this;
-        }
-    },
+    // setPlayerToHand() {
+    //     for (var i = 0; i < this.hand.length; i++) {
+    //         this.hand[i].getComponent('HandPiece').player = this;
+    //     }
+    // },
 
     addPieceToHand (pieceType) {
         // set current hand piece to piece type
-        this.hand[this.pieceCounter].getComponent('HandPiece').setHandPiece(pieceType);
+        this.hand.push(pieceType);
+        // this.hand[this.pieceCounter].getComponent('HandPiece').setHandPiece(pieceType);
         // add piece counter by 1, max of 7
-        this.pieceCounter = (this.pieceCounter + 1) % 8;
+        // this.pieceCounter = (this.pieceCounter + 1) % 8;
+        if (this.hand.length >= 7) {
+            this.handHasBeenFilled = true;
+        }
     },
 
     startPlayerTurn (isFlipped, lastAttackPieceType) {
         this.isFlipped = isFlipped;
         this.lastAttackPieceType = lastAttackPieceType;
+        this.isDefending = true;
         // if the piece is flipped
         if (isFlipped) {
             // check if there's only two pieces left in hand AND they're both kings
-            if (hand.length == 2)
+            if (this.hand.length == 2)
             {
-                if(hand[0].getComponent('HandPiece').pieceType === 'king' && hand[1].getComponent('HandPiece').pieceType === 'king') {
+                if(this.hand[0].getComponent('HandPiece').pieceType === 'king' && this.hand[1].getComponent('HandPiece').pieceType === 'king') {
                     // TODO: ask the player to win by putting out two kings or pass
                 }
             }
             // else, all pieces enabled
         } else {
-            this.isDefending = true;
+            // this.isDefending = true;
             this.checkPieceAvailability(this.isDefending);
         }
     },
@@ -88,15 +97,15 @@ cc.Class({
         this.board.getComponent('Board').addPieceToBoard(this.isFlipped, pieceType);
 
         // remove piece from hand
-        for (var i = 0; i < hand.length; i++) {
-            if (hand[i].getComponent('HandPiece').pieceType === pieceType) {
-                if (!this.isDefending) {
-                    this.attackPiece = hand[i];
-                }
-                hand.splice(i, 1);
-                break;
-            }
-        }
+        // for (var i = 0; i < this.hand.length; i++) {
+        //     if (this.hand[i] === pieceType) {
+        //         if (!this.isDefending) {
+        //             this.attackPiece = this.hand[pieceIndex];
+        //         }
+        //         this.hand.splice(i, 1);
+        //         break;
+        //     }
+        // }
 
         // if was defending, now attack
         // else, next turn
@@ -112,29 +121,39 @@ cc.Class({
             this.isFlipped = false;
             this.checkPieceAvailability(false);
         } else {
-            gameManager.getComponent('GameManager').advanceTurn(pieceType);
+            this.handBoard.getComponent('HandBoard').deactivateAllPieces();
+            this.gameManager.getComponent('GameManager').advanceTurn(pieceType);
         }
     },
 
     checkPieceAvailability (isDefending) {
         if (isDefending) {
-            for (var i = 0; i < hand.length; i++) {
+            for (var i = 0; i < this.hand.length; i++) {
                 // TODO: check king special condition in defending
-                if (hand[i].getComponent('HandPiece').pieceType !== this.lastAttackPieceType){
-                    hand[i].getComponent('Button').interactable = false;
+                if (this.hand[i] !== this.lastAttackPieceType){
+                    // this.hand[i].getComponent('Button').interactable = false;
+                    if (this.handBoard != null) {
+                        this.handBoard.getComponent('HandBoard').deactivatePiece(i);
+                    }
                 }
             }
         } else {
-            for (var i = 0; i < hand.length; i++) {
+            for (var i = 0; i < this.hand.length; i++) {
                 // TODO: only allow player to play king if KING HAS DEFENDED AND it's now player's last piece
-                if (gameManager.getComponent('GameManager').kingHasDefended) {
-                    hand[i].getComponent('Button').interactable = true;
+                if (this.gameManager.getComponent('GameManager').kingHasDefended) {
+                    if (this.handBoard != null) {
+                        this.handBoard.getComponent('HandBoard').activatePiece(i);
+                    }
                 }
                 else{
-                    if (hand[i].getComponent('HandPiece').pieceType === 'king') {
-                        hand[i].getComponent('Button').interactable = false;
+                    if (this.hand[i] === 'king') {
+                        if (this.handBoard != null) {
+                            this.handBoard.getComponent('HandBoard').deactivatePiece(i);
+                        }
                     } else {
-                        hand[i].getComponent('Button').interactable = true;
+                        if (this.handBoard != null) {
+                            this.handBoard.getComponent('HandBoard').activatePiece(i);
+                        }
                     }
                 }
             }
