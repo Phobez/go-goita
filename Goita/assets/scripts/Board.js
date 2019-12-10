@@ -129,7 +129,7 @@ cc.Class({
             if (isFlipped) {
                 this.gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[7]);
             } else {
-                this.gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[6], this.pieceTypes[7]);
+                this.gameManager.getComponent('GameManager').endRoundWithDouble(this, this.pieceTypes[6], this.pieceTypes[7]);
             }
             
         }

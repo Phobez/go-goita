@@ -27,6 +27,10 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
+        gameManager: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -38,8 +42,8 @@ cc.Class({
     },
 
     pass () {
-        // add GameManager's pass counter
-        // go to next turn
+        this.gameManager.getComponent('GameManager').addPassCounter();
+        this.gameManager.getComponent('GameManager').passTurn();
     }
 
     // update (dt) {},

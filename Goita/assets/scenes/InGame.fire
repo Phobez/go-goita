@@ -508,11 +508,12 @@
     },
     "handHasBeenFilled": false,
     "handBoard": null,
+    "isAI": true,
     "_id": "12j2GiIlhKuIGdaw9ohb8K"
   },
   {
     "__type__": "cc.Node",
-    "_name": "Board",
+    "_name": "Player 2 Board",
     "_objFlags": 0,
     "_parent": {
       "__id__": 12
@@ -799,7 +800,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Board",
+    "_name": "Player 1 Board",
     "_objFlags": 0,
     "_parent": {
       "__id__": 14
@@ -1740,7 +1741,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -1949,7 +1950,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Board",
+    "_name": "Player 3 Board",
     "_objFlags": 0,
     "_parent": {
       "__id__": 47
@@ -2890,7 +2891,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -3099,7 +3100,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Board",
+    "_name": "Player 4 Board",
     "_objFlags": 0,
     "_parent": {
       "__id__": 80
@@ -4040,7 +4041,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -5483,7 +5484,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -5581,13 +5582,14 @@
     "_enabled": true,
     "hand": [],
     "board": {
-      "__id__": 47
+      "__id__": 48
     },
     "gameManager": {
       "__id__": 5
     },
     "handHasBeenFilled": false,
     "handBoard": null,
+    "isAI": true,
     "_id": "89tkQap81CvLuthWS31sKv"
   },
   {
@@ -5665,6 +5667,7 @@
     },
     "handHasBeenFilled": false,
     "handBoard": null,
+    "isAI": true,
     "_id": "8fkzCkb6FM+6G40ewKXa3q"
   },
   {
@@ -5695,6 +5698,7 @@
     "handBoard": {
       "__id__": 156
     },
+    "isAI": false,
     "_id": "381DAuqnVJi49OHcxuN9Wh"
   },
   {
@@ -7233,6 +7237,9 @@
       "__id__": 179
     },
     "_enabled": true,
+    "gameManager": {
+      "__id__": 5
+    },
     "_id": "03ALx6zoJE57OPsy8dLST4"
   },
   {
@@ -7973,7 +7980,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -8272,7 +8279,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -8571,7 +8578,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -8870,7 +8877,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -9169,7 +9176,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -9468,7 +9475,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -9767,7 +9774,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
@@ -10066,7 +10073,7 @@
       "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
     },
     "bishopSprite": {
-      "__uuid__": "a23235d1-15db-4b95-8439-a2e005bfff91"
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
     },
     "goldGeneralSprite": {
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"

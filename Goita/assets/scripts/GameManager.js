@@ -32,11 +32,7 @@ cc.Class({
             type: cc.Node
         },
         kingHasDefended: false,
-        lastAttackPiece: {
-            default: null,
-            // TODO: not actually node, but rather PIECE information (is this node?)
-            type: cc.Node
-        }
+        lastAttackPiece: ''
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -70,6 +66,7 @@ cc.Class({
                 this.players[i].getComponent('Player').addPieceToHand(randomPieceType);
                 this.deck.splice(randomIndex, 1);
             }
+            console.log(this.players[i].name + "'s Deck: " + this.players[i].getComponent('Player').hand);
         }
     },
 
@@ -120,19 +117,29 @@ cc.Class({
         // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
         // TEMPORARY:
         this.firstPlayerIndex = 0;
-        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         this.currentPlayerIndex = this.firstPlayerIndex;
+    },
+
+    passTurn () {
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
+        if (this.passCounter == 3) {
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
+            this.passCounter = 0;
+        }
+        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
     },
 
     advanceTurn (attackPieceType) {
         this.lastAttackPieceType = attackPieceType;
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 3;
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         // if pass counter is 3 or more,
         // start player turn with isFlipped true
         if (this.passCounter == 3) {
-            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
+            this.passCounter = 0;
         }
-        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPiece);
+        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
     },
 
     addPassCounter() {
@@ -149,7 +156,7 @@ cc.Class({
         var roundPoints = 0;
 
         // get points according to last piece type
-        switch (lastPiece.getComponent('Piece').type) {
+        switch (lastPiece) {
             case 'king':
                 roundPoints = 50;
                 break;
@@ -185,7 +192,7 @@ cc.Class({
         this.checkPoints();
     },
 
-    endRound(roundWinner, secondLastPiece, lastPiece) {
+    endRoundWithDouble(roundWinner, secondLastPiece, lastPiece) {
         // if two last pieces are same piece
         // get double points
         if (secondLastPiece === lastPiece) {
@@ -232,10 +239,11 @@ cc.Class({
     },
 
     checkPoints() {
+        console.log("ROUND ENDED.");
         if (this.teamAScore >= 100 || this.teamBScore >= 100) {
             // end game
         } else {
-            this.startRound();
+            // this.startRound();
         }
     },
 

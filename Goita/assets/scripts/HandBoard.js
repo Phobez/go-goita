@@ -120,5 +120,11 @@ cc.Class({
         for (var i = 0; i < 8; i++) {
             this.pieces[i].getComponent(cc.Button).interactable = false;
         }
+    },
+
+    activateAllPieces() {
+        for (var i = 0; i < 8; i++) {
+            this.pieces[i].getComponent(cc.Button).interactable = true;
+        }
     }
 });
