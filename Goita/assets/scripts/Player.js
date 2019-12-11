@@ -41,7 +41,8 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        isAI: false
+        isAI: false,
+        isDefending: true
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -197,7 +198,6 @@ cc.Class({
                     }
 
                     if (noAvailablePiece) {
-                        this.gameManager.getComponent('GameManager').addPassCounter();
                         console.log(this.node.name + " passes.");
                         this.gameManager.getComponent('GameManager').passTurn();
                     }
@@ -212,6 +212,12 @@ cc.Class({
                 }
             }
         }
+    },
+
+    chooseRandomPiece(){
+        var temp = this.hand[i];
+        this.hand.splice(0, 1);
+        this.putPiece(this.hand[0]);
     }
 
     // update (dt) {},
