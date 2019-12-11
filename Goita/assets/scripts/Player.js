@@ -74,6 +74,7 @@ cc.Class({
     },
 
     startPlayerTurn (isFlipped, lastAttackPieceType) {
+        console.log("startPlayerTurn: " + isFlipped);
         this.isFlipped = isFlipped;
         this.lastAttackPieceType = lastAttackPieceType;
         this.isDefending = true;
@@ -81,6 +82,7 @@ cc.Class({
             this.handBoard.getComponent('HandBoard').activateAllPieces();
             // if the piece is flipped
             if (isFlipped) {
+                console.log("is flipped if entered");
                 // check if there's only two pieces left in hand AND they're both kings
                 if (this.hand.length == 2) {
                     if (this.hand[0].getComponent('HandPiece').pieceType === 'king' && this.hand[1].getComponent('HandPiece').pieceType === 'king') {
@@ -93,8 +95,10 @@ cc.Class({
                 this.checkPieceAvailability(this.isDefending);
             }
         } else {
-            console.log(this.node.name + "'s Deck: " + this.hand);
-            this.checkPieceAvailability(this.isDefending);
+            this.gameManager.getComponent('GameManager').addPassCounter();
+            this.gameManager.getComponent('GameManager').passTurn();
+            // console.log(this.node.name + "'s Deck: " + this.hand);
+            // this.checkPieceAvailability(this.isDefending);
         }
     },
 

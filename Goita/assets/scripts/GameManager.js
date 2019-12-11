@@ -124,10 +124,13 @@ cc.Class({
     passTurn () {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         if (this.passCounter == 3) {
+            console.log("pass counter if entered");
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
             this.passCounter = 0;
+        } else {
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }
-        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
+        
     },
 
     advanceTurn (attackPieceType) {
@@ -138,8 +141,10 @@ cc.Class({
         if (this.passCounter == 3) {
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
             this.passCounter = 0;
+        } else {
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }
-        this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
+        
     },
 
     addPassCounter() {
