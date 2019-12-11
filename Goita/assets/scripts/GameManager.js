@@ -66,7 +66,7 @@ cc.Class({
                 this.players[i].getComponent('Player').addPieceToHand(randomPieceType);
                 this.deck.splice(randomIndex, 1);
             }
-            console.log(this.players[i].name + "'s Deck: " + this.players[i].getComponent('Player').hand);
+            console.log(this.players[i].name + "'s Deck: " + this.players[i].getComponent('Player').debugPrintHand());
         }
     },
 
@@ -142,13 +142,14 @@ cc.Class({
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
             this.passCounter = 0;
         } else {
+            this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }
         
     },
 
     addPassCounter() {
-        this.passCounter++;
+        // this.passCounter++;
     },
 
     startRound() {

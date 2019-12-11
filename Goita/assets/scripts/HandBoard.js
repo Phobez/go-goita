@@ -92,23 +92,24 @@ cc.Class({
 
     fillBoard () {
         for (var i = 0; i < 8; i++) {
-            var pieceType = this.player.getComponent('Player').hand[i];
+            var pieceType = this.player.getComponent('Player').hand[i].type;
             this.pieces[i].getComponent('HandPiece').setHandPiece(pieceType);
         }
     },
 
     removePiece(piece) {
-        // var pieceIndex = 0;
-        // for (var i = 0; i < 8; i++) {
-        //     if (piece === this.pieces[i]) {
-        //         pieceIndex = i;
-        //         break;
-        //     }
-        // }
-        this.player.getComponent('Player').putPiece(piece.getComponent('HandPiece').pieceType);
+        var pieceIndex = 0;
+        for (var i = 0; i < 8; i++) {
+            if (piece == this.pieces[i]) {
+                pieceIndex = i;
+                break;
+            }
+        }
+        this.player.getComponent('Player').putPiece(piece.getComponent('HandPiece').pieceType, pieceIndex);
     },
 
     deactivatePiece(index) {
+        console.log("deactivate piece " + index);
         this.pieces[index].getComponent(cc.Button).interactable = false;
     },
 
