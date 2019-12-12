@@ -31,6 +31,14 @@ cc.Class({
             default: [],
             type: cc.Node
         },
+        scoreTeamA: {
+            default: null,
+            type: cc.Label
+        },
+        scoreTeamB: {
+            default: null,
+            type: cc.Label
+        },
         kingHasDefended: false,
         lastAttackPiece: ''
     },
@@ -144,8 +152,7 @@ cc.Class({
         } else {
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
-        }
-        
+        }   
     },
 
     addPassCounter() {
@@ -158,6 +165,9 @@ cc.Class({
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
     },
 
+    // scoreUpdate(roundWinner, teamScore){
+    //     this.scoreTeamA.string += teamScore;
+    // },
     endRound(roundWinner, lastPiece) {
         var roundPoints = 0;
 
@@ -183,18 +193,23 @@ cc.Class({
                 break;
         }
 
+        
         // find out which team round winner belongs to
         for (var i = 0; i < this.players.length; i++) {
-            if (roundWinner === this.players[i]) {
+            if (roundWinner == this.players[i]) {
                 if (i % 2 == 0) {
                     this.teamAScore += roundPoints;
+                    this.scoreTeamA.string = this.teamAScore;
+                    console.log(this.teamAScore);
+                    
                 } else {
                     this.teamBScore += roundPoints;
+                    this.scoreTeamB.string = this.teamBScore;
+                    console.log(this.teamBScore);
                 }
                 break;
             }
         }
-
         this.checkPoints();
     },
 
@@ -246,6 +261,7 @@ cc.Class({
 
     checkPoints() {
         console.log("ROUND ENDED.");
+        // update score
         if (this.teamAScore >= 100 || this.teamBScore >= 100) {
             // end game
         } else {
