@@ -311,11 +311,15 @@
     "teamBScoreLabel": {
       "__id__": 173
     },
+    "timerLabel": {
+      "__id__": 123
+    },
     "lastAttackPieceNode": {
       "__id__": 117
     },
     "kingHasDefended": false,
     "lastAttackPiece": "",
+    "timerTime": 10,
     "_id": "35GggzGdhDjaopaE6ANX9i"
   },
   {

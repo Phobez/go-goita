@@ -181,7 +181,6 @@ cc.Class({
                             }
                         } else {
                             if (this.handBoard != null) {
-                                console.log("Deactivate piece in Player called: " + this.hand[i].index);
                                 this.handBoard.getComponent('HandBoard').deactivatePiece(this.hand[i].index);
                             }
                         }
@@ -265,9 +264,8 @@ cc.Class({
     },
     
     chooseRandomPiece(){
-        var temp = this.hand[i];
-        this.hand.splice(0, 1);
-        this.putPiece(this.hand[0]);
+        console.log("CHOOSE RANDOM PIECE CALLED");
+        this.handBoard.getComponent('HandBoard').pieces[this.hand[0].index].getComponent('HandPiece').sendToBoard();
     }
 
     // update (dt) {},

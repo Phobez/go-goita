@@ -39,12 +39,17 @@ cc.Class({
             default: null,
             type: cc.Label
         },
+        timerLabel: {
+            default: null,
+            type: cc.Label
+        },
         lastAttackPieceNode: {
             default: null,
             type: cc.Node
         },
         kingHasDefended: false,
-        lastAttackPiece: ''
+        lastAttackPiece: '',
+        timerTime: 30
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -55,7 +60,8 @@ cc.Class({
         this.passCounter = 0;
         this.teamAScore = 0;
         this.teamBScore = 0;
-        this.timer = 30;
+        this.timer = this.timerTime;
+        this.timerIsOn = false;
     },
 
     start () {
@@ -142,6 +148,7 @@ cc.Class({
         this.firstPlayerIndex = 0;
         // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
         this.currentPlayerIndex = this.firstPlayerIndex;
+        this.startTimer();
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
     },
 
@@ -149,6 +156,11 @@ cc.Class({
     passTurn () {
         this.passCounter++;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
+
+        if (this.currentPlayerIndex == this.firstPlayerIndex) {
+            console.log("Called!");
+            this.startTimer();
+        }
 
         // if everyone else passes
         if (this.passCounter == 3) {
@@ -165,6 +177,11 @@ cc.Class({
         this.lastAttackPieceNode.getComponent('LastAttackPieceHandler').setLastAttackPieceSprite(attackPieceType);
         this.lastAttackPieceType = attackPieceType;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
+
+        if (this.currentPlayerIndex == this.firstPlayerIndex) {
+            console.log("Called!");
+            this.startTimer();
+        }
 
         // if everyone else passes
         // NOTE: this if shouldn't be possible
@@ -190,6 +207,7 @@ cc.Class({
         this.shuffleDeck();
 
         this.currentPlayerIndex = this.firstPlayerIndex;
+        this.startTimer();
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
     },
 
@@ -313,17 +331,31 @@ cc.Class({
     },
 
     update (dt) {
-        // if(this.timer > 0){
-        //     this.timer -= 1;
-        // }
-        // if(this.players[this.currentPlayerIndex].getComponent('Player').isDefending){
-        //     if(this.timer <= 0){
-        //         this.passTurn();
-        //     }
-        // }
-        // else{
-        //     this.players[this.currentPlayerIndex].getComponent('Player').chooseRandomPiece();
-        // }
-        
+        if (this.timerIsOn) {
+            if (this.timer > 0) {
+                
+                this.timer -= dt;
+                if (parseFloat(this.timerLabel.string) != Math.round(this.timer)) {
+                    this.timerLabel.string = Math.round(this.timer);
+                    
+                }
+            } else {
+                this.timerIsOn = false;
+                this.timerLabel.string = this.timerTime;
+                if (this.players[0].getComponent('Player').isDefending){
+                    if (this.timer <= 0) {
+                        console.log(this.players[0].getComponent('Player').isDefending);
+                        this.passTurn();
+                    }
+                } else {
+                    this.players[0].getComponent('Player').chooseRandomPiece();
+                }
+            }
+        }
     },
+
+    startTimer () {
+        this.timer = this.timerTime;
+        this.timerIsOn = true;
+    }
 });

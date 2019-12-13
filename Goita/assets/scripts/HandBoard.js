@@ -109,7 +109,6 @@ cc.Class({
     },
 
     deactivatePiece(index) {
-        console.log("deactivate piece " + index);
         this.pieces[index].getComponent(cc.Button).interactable = false;
     },
 
@@ -118,7 +117,6 @@ cc.Class({
     },
 
     deactivateAllPieces() {
-        console.log("Deactivate all pieces called.");
         for (var i = 0; i < 8; i++) {
             this.pieces[i].getComponent(cc.Button).interactable = false;
         }
