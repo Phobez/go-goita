@@ -31,11 +31,11 @@ cc.Class({
             default: [],
             type: cc.Node
         },
-        scoreTeamA: {
+        teamAScoreLabel: {
             default: null,
             type: cc.Label
         },
-        scoreTeamB: {
+        teamBScoreLabel: {
             default: null,
             type: cc.Label
         },
@@ -52,8 +52,6 @@ cc.Class({
     onLoad () {
         // init
         this.deck = [];
-        this.currentPlayer;
-        this.lastAttackPlayer;
         this.passCounter = 0;
         this.teamAScore = 0;
         this.teamBScore = 0;
@@ -65,12 +63,12 @@ cc.Class({
         this.chooseFirstPlayer();
     },
 
+    // fills deck and hands out pieces to players
     shuffleDeck () {
         this.fillDeck();
         
         // go through all players
         for(var i = 0; i < 4; i++) {
-            // this.players[i].getComponent('Player').setPlayerToHand();
             // give each player 8 pieces
             for(var j = 0; j < 8; j++) {
                 // choose random piece from deck
@@ -79,10 +77,11 @@ cc.Class({
                 this.players[i].getComponent('Player').addPieceToHand(randomPieceType);
                 this.deck.splice(randomIndex, 1);
             }
-            console.log(this.players[i].name + "'s Deck: " + this.players[i].getComponent('Player').debugPrintHand());
+            this.players[i].getComponent('Player').debugPrintHand();
         }
     },
 
+    // fills deck
     fillDeck () {
         // fill pawns
         for (var i = 0; i < 10; i++) {
@@ -125,59 +124,62 @@ cc.Class({
         }
     },
 
+    // choose first player randomly
     chooseFirstPlayer () {
         // choose a random player to start the game
-        // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
-        // TEMPORARY:
+        // TEMPORARY: human player always first
         this.firstPlayerIndex = 0;
-        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
+        // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
         this.currentPlayerIndex = this.firstPlayerIndex;
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
     },
 
+    // pass turn and start next turn
     passTurn () {
         this.passCounter++;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
+
+        // if everyone else passes
         if (this.passCounter == 3) {
-            console.log("pass counter if entered");
-            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
             this.passCounter = 0;
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }
         
     },
 
+    // finish turn and start next turn
     advanceTurn (attackPieceType) {
-        // set LastAttackPieceSprite is in here
         this.lastAttackPieceNode.getComponent('LastAttackPieceHandler').setLastAttackPieceSprite(attackPieceType);
         this.lastAttackPieceType = attackPieceType;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
-        // if pass counter is 3 or more,
-        // start player turn with isFlipped true
+
+        // if everyone else passes
+        // NOTE: this if shouldn't be possible
         if (this.passCounter == 3) {
-            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
             this.passCounter = 0;
+            this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }   
-        console.log('last attack piece: '+attackPieceType);
-        
     },
 
-    addPassCounter() {
-        // this.passCounter++;
-    },
-
-    startRound() {
-        this.shuffleDeck();
+    startRound () {
         this.lastAttackPiece = null;
+        this.passCounter = 0;
+
+        for (var i = 0; i < 4; i++) {
+            this.players[i].getComponent('Player').reset();
+        }
+
+        this.shuffleDeck();
+
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
     },
 
-    // scoreUpdate(roundWinner, teamScore){
-    //     this.scoreTeamA.string += teamScore;
-    // },
+    // end round with single piece
     endRound(roundWinner, lastPiece) {
         var roundPoints = 0;
         
@@ -202,20 +204,14 @@ cc.Class({
                 roundPoints = 10;
                 break;
         }
-
         
         // find out which team round winner belongs to
         for (var i = 0; i < this.players.length; i++) {
-            if (roundWinner == this.players[i]) {
+            if (roundWinner.name == this.players[i].name) {
                 if (i % 2 == 0) {
                     this.teamAScore += roundPoints;
-                    this.scoreTeamA.string = this.teamAScore;
-                    console.log(this.teamAScore);
-                    
                 } else {
                     this.teamBScore += roundPoints;
-                    this.scoreTeamB.string = this.teamBScore;
-                    console.log(this.teamBScore);
                 }
                 break;
             }
@@ -223,10 +219,11 @@ cc.Class({
         this.checkPoints();
     },
 
+    // end round with double piece
     endRoundWithDouble(roundWinner, secondLastPiece, lastPiece) {
         // if two last pieces are same piece
         // get double points
-        if (secondLastPiece === lastPiece) {
+        if (secondLastPiece == lastPiece) {
             var roundPoints = 0;
 
             // get points according to last piece type
@@ -253,7 +250,7 @@ cc.Class({
 
             // find out which team round winner belongs to
             for (var i = 0; i < this.players.length; i++) {
-                if (roundWinner === this.players[i]) {
+                if (roundWinner.name == this.players[i].name) {
                     if (i % 2 == 0) {
                         this.teamAScore += roundPoints;
                     } else {
@@ -269,14 +266,22 @@ cc.Class({
         }
     },
 
+    // checks points and determines if game has ended
     checkPoints() {
-        console.log("ROUND ENDED.");
         // update score
+        this.updateScore();
+
         if (this.teamAScore >= 100 || this.teamBScore >= 100) {
-            // end game
+            this.endGame();
         } else {
-            // this.startRound();
+            this.startRound();
         }
+    },
+
+    // updates score labels
+    updateScore() {
+        this.teamAScoreLabel.string = this.teamAScore.toString();
+        this.teamBScoreLabel.string = this.teamBScore.toString();
     },
 
     endGame() {
@@ -290,17 +295,17 @@ cc.Class({
     },
 
     update (dt) {
-        if(timer > 0){
-            this.timer -= 1;
-        }
-        if(players[this.currentPlayerIndex].getComponent('Player').isDefending){
-            if(timer <= 0){
-                this.passTurn();
-            }
-        }
-        else{
-            players[this.currentPlayerIndex].getComponent('Player').chooseRandomPiece();
-        }
+        // if(this.timer > 0){
+        //     this.timer -= 1;
+        // }
+        // if(this.players[this.currentPlayerIndex].getComponent('Player').isDefending){
+        //     if(this.timer <= 0){
+        //         this.passTurn();
+        //     }
+        // }
+        // else{
+        //     this.players[this.currentPlayerIndex].getComponent('Player').chooseRandomPiece();
+        // }
         
     },
 });

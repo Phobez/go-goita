@@ -42,7 +42,6 @@ cc.Class({
     },
 
     pass () {
-        this.gameManager.getComponent('GameManager').addPassCounter();
         this.gameManager.getComponent('GameManager').passTurn();
     }
 

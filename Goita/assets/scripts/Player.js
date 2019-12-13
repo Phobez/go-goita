@@ -49,7 +49,6 @@ cc.Class({
 
     onLoad () {
         this.hand = [];
-        this.availablePieces = [];
         this.isDefending = true;
     },
 
@@ -80,7 +79,6 @@ cc.Class({
     },
 
     startPlayerTurn (isFlipped, lastAttackPieceType) {
-        console.log(lastAttackPieceType);
         this.isFlipped = isFlipped;
         this.lastAttackPieceType = lastAttackPieceType;
         this.isDefending = true;
@@ -88,12 +86,10 @@ cc.Class({
             this.handBoard.getComponent('HandBoard').activateAllPieces();
             // if the piece is flipped
             if (isFlipped) {
-                console.log("is flipped if entered");
                 // check if there's only two pieces left in hand AND they're both kings
                 if (this.hand.length == 2) {
                     if (this.hand[0].type == 'king' && this.hand[1].type == 'king') {
                         // TODO: ask the player to win by putting out two kings or pass
-                        console.log('king if entered!');
                     }
                 }
                 // else, all pieces enabled
@@ -107,6 +103,14 @@ cc.Class({
             // console.log(this.node.name + "'s Deck: " + this.hand);
             this.checkPieceAvailability(this.isDefending);
         }
+    },
+
+    reset () {
+        this.hand = [];
+        this.pieceCounter = 0;
+        this.isDefending = true;
+
+        this.board.getComponent('Board').clearBoard();
     },
 
     putPiece (pieceType, pieceIndex) {
@@ -161,6 +165,7 @@ cc.Class({
     },
 
     checkPieceAvailability (isDefending) {
+        console.log("CHECK PIECE AVAILABILITY");
         if (!(this.isAI)) {
             if (isDefending) {
                 for (var i = 0; i < this.hand.length; i++) {
@@ -206,7 +211,7 @@ cc.Class({
         } else {
             if (isDefending) {
                 if (this.lastAttackPieceType == '') {
-                    var temp = this.hand[i].type;
+                    var temp = this.hand[0].type;
                     this.hand.splice(0, 1);
                     console.log(this.node.name + ': '+ this.hand.length);
                     this.debugPrintHand();
@@ -249,9 +254,14 @@ cc.Class({
     },
 
     debugPrintHand() {
+        var debugPrint = this.node.name + ": ";
         for (var i = 0; i < this.hand.length; i++) {
-            console.log(this.node.name + ": " + this.hand[i].type);
+            debugPrint += this.hand[i].type;
+            if (i < this.hand.length - 1) {
+                debugPrint += ", ";
+            }
         }
+        console.log(debugPrint);
     },
     
     chooseRandomPiece(){

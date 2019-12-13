@@ -31,6 +31,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        player: {
+            default: null,
+            type: cc.Node
+        },
         pieces: {
             default: [],
             type: cc.Sprite
@@ -126,12 +130,20 @@ cc.Class({
 
         if (this.pieceCounter > 7) {
             this.pieceCounter = 0;
-            if (isFlipped) {
-                this.gameManager.getComponent('GameManager').endRound(this, this.pieceTypes[7]);
+
+            if (this.pieceTypes[6] == this.pieceTypes[7]) {
+                this.gameManager.getComponent('GameManager').endRoundWithDouble(this.player, this.pieceTypes[6], this.pieceTypes[7]);
             } else {
-                this.gameManager.getComponent('GameManager').endRoundWithDouble(this, this.pieceTypes[6], this.pieceTypes[7]);
+                this.gameManager.getComponent('GameManager').endRound(this.player, this.pieceTypes[7]);
             }
             
+        }
+    },
+
+    // clears all pieces from board
+    clearBoard () {
+        for (var i = 0; i < 8; i++) {
+            this.pieces[i].spriteFrame = null;
         }
     }
 
