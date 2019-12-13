@@ -59,8 +59,19 @@ cc.Class({
     },
 
     start () {
-        this.shuffleDeck();
-        this.chooseFirstPlayer();
+        if (cc.sys.localStorage.getItem('hasEndedRoundBefore') == 'true') {
+            this.firstPlayerIndex = cc.sys.localStorage.getItem('firstPlayerIndex');
+            this.teamAScore = cc.sys.localStorage.getItem('teamAScore');
+            this.teamBScore = cc.sys.localStorage.getItem('teamBScore');
+            console.log("Team A Score: " + this.teamAScore);
+            console.log("Team B Score: " + this.teamBScore);
+            this.updateScore();
+            this.startRound();
+        } else {
+            this.shuffleDeck();
+            this.chooseFirstPlayer();
+        }
+        
     },
 
     // fills deck and hands out pieces to players
@@ -161,21 +172,24 @@ cc.Class({
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
+            console.log(this.currentPlayerIndex);
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }   
     },
 
     startRound () {
-        this.lastAttackPiece = null;
-        this.passCounter = 0;
 
-        for (var i = 0; i < 4; i++) {
-            this.players[i].getComponent('Player').reset();
-        }
+        // this.lastAttackPiece = null;
+        // this.passCounter = 0;
+
+        // for (var i = 0; i < 4; i++) {
+        //     this.players[i].getComponent('Player').reset();
+        // }
 
         this.shuffleDeck();
 
+        this.currentPlayerIndex = this.firstPlayerIndex;
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
     },
 
@@ -274,7 +288,11 @@ cc.Class({
         if (this.teamAScore >= 100 || this.teamBScore >= 100) {
             this.endGame();
         } else {
-            this.startRound();
+            cc.sys.localStorage.setItem('hasEndedRoundBefore', true);
+            cc.sys.localStorage.setItem('firstPlayerIndex', this.firstPlayerIndex);
+            cc.sys.localStorage.setItem('teamAScore', this.teamAScore);
+            cc.sys.localStorage.setItem('teamBScore', this.teamBScore);
+            cc.director.loadScene(cc.director.getScene().name);
         }
     },
 
