@@ -57,6 +57,7 @@ cc.Class({
         this.passCounter = 0;
         this.teamAScore = 0;
         this.teamBScore = 0;
+        this.timer = 30;
     },
 
     start () {
@@ -134,6 +135,7 @@ cc.Class({
     },
 
     passTurn () {
+        this.passCounter++;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         if (this.passCounter == 3) {
             console.log("pass counter if entered");
@@ -285,7 +287,20 @@ cc.Class({
         } else {
             // draw
         }
-    }
+    },
 
-    //update (dt) {},
+    update (dt) {
+        if(timer > 0){
+            this.timer -= 1;
+        }
+        if(players[this.currentPlayerIndex].getComponent('Player').isDefending){
+            if(timer <= 0){
+                this.passTurn();
+            }
+        }
+        else{
+            players[this.currentPlayerIndex].getComponent('Player').chooseRandomPiece();
+        }
+        
+    },
 });
