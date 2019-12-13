@@ -39,6 +39,10 @@ cc.Class({
             default: null,
             type: cc.Label
         },
+        lastAttackPieceNode: {
+            default: null,
+            type: cc.Node
+        },
         kingHasDefended: false,
         lastAttackPiece: ''
     },
@@ -142,6 +146,8 @@ cc.Class({
     },
 
     advanceTurn (attackPieceType) {
+        // set LastAttackPieceSprite is in here
+        this.lastAttackPieceNode.getComponent('LastAttackPieceHandler').setLastAttackPieceSprite(attackPieceType);
         this.lastAttackPieceType = attackPieceType;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
         // if pass counter is 3 or more,
@@ -153,6 +159,8 @@ cc.Class({
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }   
+        console.log('last attack piece: '+attackPieceType);
+        
     },
 
     addPassCounter() {
@@ -170,7 +178,7 @@ cc.Class({
     // },
     endRound(roundWinner, lastPiece) {
         var roundPoints = 0;
-
+        
         // get points according to last piece type
         switch (lastPiece) {
             case 'king':

@@ -308,6 +308,9 @@
     "scoreTeamB": {
       "__id__": 173
     },
+    "lastAttackPieceNode": {
+      "__id__": 113
+    },
     "kingHasDefended": false,
     "lastAttackPiece": {
       "__id__": 113
@@ -4296,14 +4299,30 @@
     "gameManager": {
       "__id__": 5
     },
-    "kingSprite": null,
-    "rookSprite": null,
-    "bishopSprite": null,
-    "goldGeneralSprite": null,
-    "silverGeneralSprite": null,
-    "knightSprite": null,
-    "lanceSprite": null,
-    "pawnSprite": null,
+    "kingSprite": {
+      "__uuid__": "e7aba14b-f956-4480-b254-8d57832e273f"
+    },
+    "rookSprite": {
+      "__uuid__": "1a32fc76-f0bd-4f66-980f-56929c0ca0b3"
+    },
+    "bishopSprite": {
+      "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
+    },
+    "goldGeneralSprite": {
+      "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
+    },
+    "silverGeneralSprite": {
+      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+    },
+    "knightSprite": {
+      "__uuid__": "e9ec654c-97a2-4787-9325-e6a10375219a"
+    },
+    "lanceSprite": {
+      "__uuid__": "7168db62-0edc-42e5-be5d-682cf6c4a165"
+    },
+    "pawnSprite": {
+      "__uuid__": "90004ad6-2f6d-40e1-93ef-b714375c6f06"
+    },
     "_id": "89aY1h5YNMCa1MDy7fWOHP"
   },
   {

@@ -72,7 +72,7 @@ cc.Class({
 
     start () {
         this.spriteComponent = this.node.getComponent(cc.Sprite);
-        pieceType = this.gameManager.getComponent('Game Manager').lastAttackPieceType;
+        this.pieceType = this.gameManager.getComponent('GameManager').lastAttackPieceType;
     },
     setLastAttackPieceSprite(pieceType) {
         // sets piece type
