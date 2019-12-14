@@ -27,29 +27,53 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
+        resultLabel: {
+            default: null,
+            type: cc.Label
+        },
+        teamAScoreLabel: {
+            default: null,
+            type: cc.Label
+        },
+        teamBScoreLabel: {
+            default: null,
+            type: cc.Label
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        var winner = cc.sys.localStorage.getItem('winner');
+
+        if (winner == 0) {
+            this.resultLabel.string = 'YOU WIN';
+        } else if (winner == 1) {
+            this.resultLabel.string = 'YOU LOSE';
+        }
+
+        var teamAScore = cc.sys.localStorage.getItem('teamAScore');
+        var teamBScore = cc.sys.localStorage.getItem('teamBScore');
+
+        this.teamAScoreLabel.string = teamAScore.toString();
+        this.teamBScoreLabel.string = teamBScore.toString();
+    },
 
     start () {
 
     },
 
-    loadScene(event, sceneName) {
-        if (sceneName == 'InGame') {
-            cc.sys.localStorage.setItem('hasEndedRoundBefore', false);
-            cc.sys.localStorage.setItem('firstPlayerIndex', -1);
-            cc.sys.localStorage.setItem('teamAScore', 0);
-            cc.sys.localStorage.setItem('teamBScore', 0);
-            cc.sys.localStorage.setItem('winner', 0);
-        }
-        cc.director.loadScene(sceneName);
+    returnToMainMenu() {
+        cc.director.loadScene('MainMenu');
     },
 
-    quitGame() {
-        cc.game.end();
+    playAgain() {
+        cc.sys.localStorage.setItem('hasEndedRoundBefore', false);
+        cc.sys.localStorage.setItem('firstPlayerIndex', -1);
+        cc.sys.localStorage.setItem('teamAScore', 0);
+        cc.sys.localStorage.setItem('teamBScore', 0);
+        cc.sys.localStorage.setItem('winner', 0);
+        cc.director.loadScene('InGame');
     }
 
     // update (dt) {},

@@ -27,21 +27,26 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        hand: [],
-        board: {
-            default: null,
-            type: cc.Node
-        },
+        isAI: false,
+        aiReactionDelay: 1,
         gameManager: {
             default: null,
             type: cc.Node
         },
-        handHasBeenFilled: false,
+        board: {
+            default: null,
+            type: cc.Node
+        },
         handBoard: {
             default: null,
             type: cc.Node
         },
-        isAI: false,
+        passButton: {
+            default: null,
+            type: cc.Button
+        },
+        hand: [],
+        handHasBeenFilled: false,
         isDefending: true
     },
 
@@ -56,40 +61,34 @@ cc.Class({
         this.pieceCounter = 0;
     },
 
-    // setPlayerToHand() {
-    //     for (var i = 0; i < this.hand.length; i++) {
-    //         this.hand[i].getComponent('HandPiece').player = this;
-    //     }
-    // },
-
     addPieceToHand (pieceType) {
-        // set current hand piece to piece type
-        // this.hand.push(pieceType);
-        // this.hand[this.pieceCounter].getComponent('HandPiece').setHandPiece(pieceType);
-        // add piece counter by 1, max of 7
-        // this.pieceCounter = (this.pieceCounter + 1) % 8;
         var obj = {
             type: pieceType,
             index: this.hand.length
         };
         this.hand.push(obj);
+
+        // set flag as true if hand is complete
         if (this.hand.length >= 7) {
             this.handHasBeenFilled = true;
         }
     },
 
+    // starts turn
     startPlayerTurn (isFlipped, lastAttackPieceType) {
         this.isFlipped = isFlipped;
         this.lastAttackPieceType = lastAttackPieceType;
         this.isDefending = true;
         if (!(this.isAI)) {
+            this.passButton.interactable = true;
             this.handBoard.getComponent('HandBoard').activateAllPieces();
             // if the piece is flipped
             if (isFlipped) {
+                this.passButton.interactable = false;
                 // check if there's only two pieces left in hand AND they're both kings
                 if (this.hand.length == 2) {
                     if (this.hand[0].type == 'king' && this.hand[1].type == 'king') {
-                        // TODO: ask the player to win by putting out two kings or pass
+                        this.isFlipped = false;
                     }
                 }
                 // else, all pieces enabled
@@ -102,9 +101,8 @@ cc.Class({
             // this.gameManager.getComponent('GameManager').passTurn();
             // console.log(this.node.name + "'s Deck: " + this.hand);
             this.scheduleOnce(function() {
-                console.log(this.isDefending);
                 this.checkPieceAvailability(this.isDefending);
-            }, 2);
+            }, this.aiReactionDelay);
         }
     },
 
@@ -136,7 +134,7 @@ cc.Class({
         // else, next turn
         if (this.isDefending) {
             // if the defending piece is king
-            if (pieceType === 'king') {
+            if (pieceType == 'king' && !(this.isFlipped)) {
                 // if king hasn't been played before
                 if (!(this.gameManager.getComponent('GameManager').kingHasDefended)) {
                     this.gameManager.getComponent('GameManager').kingHasDefended = true;
@@ -148,9 +146,10 @@ cc.Class({
                 // this.hand.splice(this.hand.indexOf(pieceType), 1);
                 for (var i = 0; i < this.hand.length; i++) {
                     if (this.hand[i].index == pieceIndex) {
-                        console.log(this.hand.splice(i, 1));
+                        this.hand.splice(i, 1);
                     }
                 }
+                this.passButton.interactable = false;
             }
             this.checkPieceAvailability(false);
         } else {
@@ -158,28 +157,64 @@ cc.Class({
                 // this.hand.splice(this.hand.indexOf(pieceType), 1);
                 for (var i = 0; i < this.hand.length; i++) {
                     if (this.hand[i].index == pieceIndex) {
-                        console.log(this.hand.splice(i, 1));
+                        this.hand.splice(i, 1);
                     }
                 }
                 this.handBoard.getComponent('HandBoard').deactivateAllPieces();
+                this.passButton.interactable = false;
             }
             this.gameManager.getComponent('GameManager').advanceTurn(pieceType);
         }
     },
 
     checkPieceAvailability (isDefending) {
-        console.log("CHECK PIECE AVAILABILITY");
         if (!(this.isAI)) {
             if (isDefending) {
+                // if only 2 pieces left on hand
+                if (this.hand.length == 2) {
+                    var kingIndex = -1;
+                    var thereIsKing = false;
+                    // go through all remaining pieces on hand
+                    for (var i = 0; i < this.hand.length; i++) {
+                        // find king, if any
+                        if (this.hand[i].type == 'king') {
+                            kingIndex = i;
+                            thereIsKing = true;
+                            break;
+                        }
+                    }
+
+                    // if there is king
+                    if (thereIsKing) {
+                        // if king hasn't been used to defend
+                        if (!(this.gameManager.getComponent('GameManager').kingHasDefended)) {
+                            // disable other piece
+                            // get other piece index
+                            var otherPieceIndex = (kingIndex + 1) % 2; 
+                            if (this.handBoard != null) {
+                                this.handBoard.getComponent('HandBoard').deactivatePiece(this.hand[otherPieceIndex].index);
+                            }
+
+                            // check if king can be used
+                            if (this.lastAttackPieceType == 'pawn' || this.lastAttackPieceType == 'lance') {
+                                this.handBoard.getComponent('HandBoard').deactivatePiece(this.hand[kingIndex].index);
+                            }
+                        }
+                    }
+
+                    return;
+                }
+
                 for (var i = 0; i < this.hand.length; i++) {
-                    // TODO: check king special condition in defending
-                    //console.log(this.hand[i].type);
-                    if (this.hand[i].type != this.lastAttackPieceType){
-                        // this.hand[i].getComponent('Button').interactable = false;
+                    if (this.hand[i].type != this.lastAttackPieceType) {
                         if (this.hand[i].type == 'king') {
                             if (this.lastAttackPieceType == 'lance' || this.lastAttackPieceType == 'pawn') {
                                 if (this.handBoard != null) {
                                     this.handBoard.getComponent('HandBoard').deactivatePiece(this.hand[i].index);
+                                }
+                            } else {
+                                if (this.handBoard != null) {
+                                    this.handBoard.getComponent('HandBoard').activatePiece(this.hand[i].index);
                                 }
                             }
                         } else {
@@ -189,15 +224,15 @@ cc.Class({
                         }
                     }
                 }
-            } else {
+            } else { // attacking
                 for (var i = 0; i < this.hand.length; i++) {
                     // TODO: only allow player to play king if KING HAS DEFENDED AND it's now player's last piece
+                    // if king has defended, activate all pieces
                     if (this.gameManager.getComponent('GameManager').kingHasDefended) {
                         if (this.handBoard != null) {
                             this.handBoard.getComponent('HandBoard').activatePiece(this.hand[i].index);
                         }
-                    }
-                    else{
+                    } else {
                         if (this.hand[i].type === 'king') {
                             if (this.handBoard != null) {
                                 this.handBoard.getComponent('HandBoard').deactivatePiece(this.hand[i].index);
@@ -254,6 +289,7 @@ cc.Class({
                             this.hand.splice(i, 1);
                             this.putPiece(temp, -1);
                             this.debugPrintHand();
+                            break;
                         }
                     } else {
                         var temp = this.hand[i].type;

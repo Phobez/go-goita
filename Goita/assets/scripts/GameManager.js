@@ -39,17 +39,16 @@ cc.Class({
             default: null,
             type: cc.Label
         },
-        timerLabel: {
-            default: null,
-            type: cc.Label
-        },
         lastAttackPieceNode: {
             default: null,
             type: cc.Node
         },
-        kingHasDefended: false,
-        lastAttackPiece: '',
-        timerTime: 30
+        timerLabel: {
+            default: null,
+            type: cc.Label
+        },
+        timerTime: 30,
+        kingHasDefended: false
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -60,41 +59,54 @@ cc.Class({
         this.passCounter = 0;
         this.teamAScore = 0;
         this.teamBScore = 0;
-        this.timer = this.timerTime;
         this.timerIsOn = false;
+        this.timer = this.timerTime;
+        this.lastAttackPieceType = '';
     },
 
     start () {
         if (cc.sys.localStorage.getItem('hasEndedRoundBefore') == 'true') {
             this.firstPlayerIndex = cc.sys.localStorage.getItem('firstPlayerIndex');
-            this.teamAScore = cc.sys.localStorage.getItem('teamAScore');
-            this.teamBScore = cc.sys.localStorage.getItem('teamBScore');
-            console.log("Team A Score: " + this.teamAScore);
-            console.log("Team B Score: " + this.teamBScore);
+            this.teamAScore = parseInt(cc.sys.localStorage.getItem('teamAScore'));
+            this.teamBScore = parseInt(cc.sys.localStorage.getItem('teamBScore'));
             this.updateScore();
             this.startRound();
         } else {
             this.shuffleDeck();
             this.chooseFirstPlayer();
         }
-        
     },
 
     // fills deck and hands out pieces to players
     shuffleDeck () {
         this.fillDeck();
+        var pawnCounter = 0;
         
         // go through all players
         for(var i = 0; i < 4; i++) {
+            pawnCounter = 0;
             // give each player 8 pieces
             for(var j = 0; j < 8; j++) {
                 // choose random piece from deck
                 var randomIndex = Math.floor((Math.random() * this.deck.length));
                 var randomPieceType = this.deck[randomIndex];
+                
+                // makes sure there is max of 5 pawns per person
+                if (randomPieceType == 'pawn' && pawnCounter <= 4) {
+                    pawnCounter++;
+                }
+                if (pawnCounter > 4) {
+                    while (randomPieceType == 'pawn') {
+                        randomIndex = Math.floor((Math.random() * this.deck.length));
+                        randomPieceType = this.deck[randomIndex];
+                    }
+                }
+                
                 this.players[i].getComponent('Player').addPieceToHand(randomPieceType);
                 this.deck.splice(randomIndex, 1);
             }
             this.players[i].getComponent('Player').debugPrintHand();
+            console.log("PAWNS: " + pawnCounter);
         }
     },
 
@@ -144,9 +156,7 @@ cc.Class({
     // choose first player randomly
     chooseFirstPlayer () {
         // choose a random player to start the game
-        // TEMPORARY: human player always first
-        this.firstPlayerIndex = 0;
-        // this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
+        this.firstPlayerIndex = Math.floor((Math.random() * this.players.length));
         this.currentPlayerIndex = this.firstPlayerIndex;
         this.startTimer();
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
@@ -155,12 +165,9 @@ cc.Class({
     // pass turn and start next turn
     passTurn () {
         this.passCounter++;
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
-
-        if (this.currentPlayerIndex == this.firstPlayerIndex) {
-            console.log("Called!");
-            this.startTimer();
-        }
+        this.currentPlayerIndex++;
+        this.currentPlayerIndex = this.currentPlayerIndex % 4;
+        this.startTimer();
 
         // if everyone else passes
         if (this.passCounter == 3) {
@@ -176,12 +183,9 @@ cc.Class({
     advanceTurn (attackPieceType) {
         this.lastAttackPieceNode.getComponent('LastAttackPieceHandler').setLastAttackPieceSprite(attackPieceType);
         this.lastAttackPieceType = attackPieceType;
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 4;
-
-        if (this.currentPlayerIndex == this.firstPlayerIndex) {
-            console.log("Called!");
-            this.startTimer();
-        }
+        this.currentPlayerIndex++;
+        this.currentPlayerIndex = this.currentPlayerIndex % 4;
+        this.startTimer();
 
         // if everyone else passes
         // NOTE: this if shouldn't be possible
@@ -189,26 +193,18 @@ cc.Class({
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
-            console.log(this.currentPlayerIndex);
             this.passCounter = 0;
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }   
     },
 
     startRound () {
-
-        // this.lastAttackPiece = null;
-        // this.passCounter = 0;
-
-        // for (var i = 0; i < 4; i++) {
-        //     this.players[i].getComponent('Player').reset();
-        // }
-
         this.shuffleDeck();
-
         this.currentPlayerIndex = this.firstPlayerIndex;
         this.startTimer();
-        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPiece);
+        console.log("CURRENT PLAYER INDEX: " + this.currentPlayerIndex);
+        console.log("FIRST PLAYER INDEX: " + this.firstPlayerIndex);
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPieceType);
     },
 
     // end round with single piece
@@ -238,6 +234,7 @@ cc.Class({
         }
         
         // find out which team round winner belongs to
+        var winnerIndex = -1;
         for (var i = 0; i < this.players.length; i++) {
             if (roundWinner.name == this.players[i].name) {
                 if (i % 2 == 0) {
@@ -245,10 +242,11 @@ cc.Class({
                 } else {
                     this.teamBScore += roundPoints;
                 }
+                winnerIndex = i;
                 break;
             }
         }
-        this.checkPoints();
+        this.checkPoints(winnerIndex);
     },
 
     // end round with double piece
@@ -281,25 +279,28 @@ cc.Class({
             }
 
             // find out which team round winner belongs to
+            var winnerIndex = -1;
             for (var i = 0; i < this.players.length; i++) {
                 if (roundWinner.name == this.players[i].name) {
                     if (i % 2 == 0) {
                         this.teamAScore += roundPoints;
+                        console.log
                     } else {
                         this.teamBScore += roundPoints;
                     }
+                    winnerIndex = i;
                     break;
                 }
             }
 
-            this.checkPoints();
+            this.checkPoints(winnerIndex);
         } else {
             this.endRound(roundWinner, lastPiece);
         }
     },
 
     // checks points and determines if game has ended
-    checkPoints() {
+    checkPoints(winnerIndex) {
         // update score
         this.updateScore();
 
@@ -307,7 +308,7 @@ cc.Class({
             this.endGame();
         } else {
             cc.sys.localStorage.setItem('hasEndedRoundBefore', true);
-            cc.sys.localStorage.setItem('firstPlayerIndex', this.firstPlayerIndex);
+            cc.sys.localStorage.setItem('firstPlayerIndex', winnerIndex);
             cc.sys.localStorage.setItem('teamAScore', this.teamAScore);
             cc.sys.localStorage.setItem('teamBScore', this.teamBScore);
             cc.director.loadScene(cc.director.getScene().name);
@@ -320,22 +321,35 @@ cc.Class({
         this.teamBScoreLabel.string = this.teamBScore.toString();
     },
 
+    // ends game
     endGame() {
-        console.log("END GAME STARTED");
+        cc.sys.localStorage.setItem('teamAScore', this.teamAScore);
+        cc.sys.localStorage.setItem('teamBScore', this.teamBScore);
+
+        // destroy all player nodes to stop all turn processing
         for (var i = 0; i < 4; i++) {
             this.players[i].destroy();
         }
 
         if (this.teamAScore > this.teamBScore) {
             // team A wins
+            cc.sys.localStorage.setItem('winner', 0);
         } else if (this.teamAScore < this.teamBScore) {
             // team B wins
+            cc.sys.localStorage.setItem('winner', 1);
         } else {
             // draw
+            // NOTE: shouldn't be possible
+            cc.sys.localStorage.setItem('winner', 2);
         }
+
+        this.scheduleOnce(function() {
+            cc.director.loadScene('Results');
+        }, 2);
     },
 
     update (dt) {
+        // timer logic
         if (this.timerIsOn) {
             if (this.timer > 0) {
                 
@@ -359,6 +373,7 @@ cc.Class({
         }
     },
 
+    // starts/restarts the timer
     startTimer () {
         this.timer = this.timerTime;
         this.timerIsOn = true;

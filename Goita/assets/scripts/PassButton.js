@@ -42,6 +42,7 @@ cc.Class({
     },
 
     pass () {
+        this.node.getComponent(cc.Button).interactable = false;
         this.gameManager.getComponent('GameManager').passTurn();
     }
 

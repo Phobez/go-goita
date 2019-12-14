@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "1b0da38b-7ca9-44e3-84be-5f7a677ba275",
+  "uuid": "bbf4af78-dd5f-4759-b428-8eb3cc184237",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "board": {
+    "bg-ingame": {
       "ver": "1.0.4",
-      "uuid": "06ee0a47-81a6-4014-ac79-af4821654650",
-      "rawTextureUuid": "1b0da38b-7ca9-44e3-84be-5f7a677ba275",
+      "uuid": "7c364ba0-5141-435f-b2de-8e99047076a4",
+      "rawTextureUuid": "bbf4af78-dd5f-4759-b428-8eb3cc184237",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
