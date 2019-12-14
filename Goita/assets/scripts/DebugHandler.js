@@ -27,6 +27,10 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
+        gameManager: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -42,6 +46,10 @@ cc.Class({
         cc.sys.localStorage.setItem('firstPlayerIndex', 0);
         cc.sys.localStorage.setItem('teamAScore', 0);
         cc.sys.localStorage.setItem('teamBScore', 0);
+    },
+
+    win() {
+        this.gameManager.getComponent('GameManager').endGame();
     }
 
     // update (dt) {},

@@ -321,6 +321,11 @@ cc.Class({
     },
 
     endGame() {
+        console.log("END GAME STARTED");
+        for (var i = 0; i < 4; i++) {
+            this.players[i].destroy();
+        }
+
         if (this.teamAScore > this.teamBScore) {
             // team A wins
         } else if (this.teamAScore < this.teamBScore) {

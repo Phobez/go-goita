@@ -101,7 +101,10 @@ cc.Class({
             // this.gameManager.getComponent('GameManager').addPassCounter();
             // this.gameManager.getComponent('GameManager').passTurn();
             // console.log(this.node.name + "'s Deck: " + this.hand);
-            this.checkPieceAvailability(this.isDefending);
+            this.scheduleOnce(function() {
+                console.log(this.isDefending);
+                this.checkPieceAvailability(this.isDefending);
+            }, 2);
         }
     },
 
@@ -219,11 +222,18 @@ cc.Class({
                 } else {
                     var noAvailablePiece = true;
                     for (var i = 0; i < this.hand.length; i++) {
-                        // TODO: check king special condition in defending
+                        if (this.hand[i].type == 'king') {
+                            if (this.lastAttackPieceType != 'pawn' && this.lastAttackPieceType != 'lance') {
+                                var temp = this.hand[i].type;
+                                this.hand.splice(i, 1);
+                                this.putPiece(temp, -1);
+                                noAvailablePiece = false;
+                                break;
+                            }
+                        }
                         if (this.hand[i].type === this.lastAttackPieceType) {
                             var temp = this.hand[i].type;
                             this.hand.splice(i,1);
-                            console.log(this.node.name + ': '+ this.hand.length);
                             this.debugPrintHand();
                             this.putPiece(temp, -1);
                             noAvailablePiece = false;
@@ -237,17 +247,33 @@ cc.Class({
                     }
                 }
             } else {
-                if (this.hand[0].type == 'king' && !(this.gameManager.getComponent('GameManager').kingHasDefended)) {
-                    this.putPiece(this.hand[1].type, -1);
-                    this.hand.splice(1, 1);
-                    console.log(this.node.name + ': '+ this.hand.length);
-                    this.debugPrintHand();
-                } else {
-                    this.putPiece(this.hand[0].type, -1);
-                    this.hand.splice(0, 1);
-                    console.log(this.node.name + ': '+ this.hand.length);
-                    this.debugPrintHand();
+                for (var i = 0; i < this.hand.length; i++) {
+                    if (this.hand[i].type == 'king') {
+                        if (!(this.gameManager.getComponent('GameManager').kingHasDefended)) {
+                            var temp = this.hand[i].type;
+                            this.hand.splice(i, 1);
+                            this.putPiece(temp, -1);
+                            this.debugPrintHand();
+                        }
+                    } else {
+                        var temp = this.hand[i].type;
+                        this.hand.splice(i, 1);
+                        this.putPiece(temp, -1);
+                        this.debugPrintHand();
+                        break;
+                    }
                 }
+                // if (this.hand[0].type == 'king' && !(this.gameManager.getComponent('GameManager').kingHasDefended)) {
+                //     this.putPiece(this.hand[1].type, -1);
+                //     this.hand.splice(1, 1);
+                //     console.log(this.node.name + ': '+ this.hand.length);
+                //     this.debugPrintHand();
+                // } else {
+                //     this.putPiece(this.hand[0].type, -1);
+                //     this.hand.splice(0, 1);
+                //     console.log(this.node.name + ': '+ this.hand.length);
+                //     this.debugPrintHand();
+                // }
             }
         }
     },
