@@ -284,7 +284,7 @@ cc.Class({
             } else {
                 for (var i = 0; i < this.hand.length; i++) {
                     if (this.hand[i].type == 'king') {
-                        if (!(this.gameManager.getComponent('GameManager').kingHasDefended)) {
+                        if (this.gameManager.getComponent('GameManager').kingHasDefended) {
                             var temp = this.hand[i].type;
                             this.hand.splice(i, 1);
                             this.putPiece(temp, -1);
