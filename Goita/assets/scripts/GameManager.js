@@ -204,7 +204,7 @@ cc.Class({
         this.startTimer();
         console.log("CURRENT PLAYER INDEX: " + this.currentPlayerIndex);
         console.log("FIRST PLAYER INDEX: " + this.firstPlayerIndex);
-        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, this.lastAttackPieceType);
+        this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
     },
 
     // end round with single piece
@@ -311,14 +311,22 @@ cc.Class({
             cc.sys.localStorage.setItem('firstPlayerIndex', winnerIndex);
             cc.sys.localStorage.setItem('teamAScore', this.teamAScore);
             cc.sys.localStorage.setItem('teamBScore', this.teamBScore);
+            // destroy all player nodes to stop all turn processing
+            for (var i = 0; i < 4; i++) {
+                this.players[i].destroy();
+            }
+            console.log("INGAME");
             cc.director.loadScene(cc.director.getScene().name);
         }
     },
 
     // updates score labels
     updateScore() {
+        console.log("TEAM A SCORE: " + this.teamAScore);
+        console.log("TEAM B SCORE: " + this.teamBScore);
         this.teamAScoreLabel.string = this.teamAScore.toString();
         this.teamBScoreLabel.string = this.teamBScore.toString();
+        
     },
 
     // ends game
@@ -343,6 +351,7 @@ cc.Class({
             cc.sys.localStorage.setItem('winner', 2);
         }
 
+        console.log("RESULTS");
         this.scheduleOnce(function() {
             cc.director.loadScene('Results');
         }, 2);

@@ -68,10 +68,12 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.spriteComponent = this.node.getChildByName('Background').getComponent(cc.Sprite);
+    },
 
     start () {
-        this.spriteComponent = this.node.getChildByName('Background').getComponent(cc.Sprite);
+        
     },
 
     setHandPiece(pieceType) {

@@ -38,7 +38,7 @@ cc.Class({
     // onLoad () {},
 
     start () {
-
+        this.volume = cc.sys.localStorage.getItem("sfxVol")
     },
 
     loadScene(event, sceneName) {
@@ -57,7 +57,7 @@ cc.Class({
     },
 
     playClip() {
-        cc.audioEngine.play(this.audioClip, false, 1);
+        cc.audioEngine.play(this.audioClip, false, this.volume);
     }
 
     // update (dt) {},
