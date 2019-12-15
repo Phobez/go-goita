@@ -27,9 +27,9 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        resultLabel: {
+        resultPanel: {
             default: null,
-            type: cc.Label
+            type: cc.Sprite
         },
         teamAScoreLabel: {
             default: null,
@@ -38,6 +38,14 @@ cc.Class({
         teamBScoreLabel: {
             default: null,
             type: cc.Label
+        },
+        winPanel: {
+            default: null,
+            type: cc.SpriteFrame
+        },
+        losePanel: {
+            default: null,
+            type: cc.SpriteFrame
         }
     },
 
@@ -47,9 +55,9 @@ cc.Class({
         var winner = cc.sys.localStorage.getItem('winner');
 
         if (winner == 0) {
-            this.resultLabel.string = 'YOU WIN';
+            this.resultPanel.spriteFrame = this.winPanel;
         } else if (winner == 1) {
-            this.resultLabel.string = 'YOU LOSE';
+            this.resultPanel.spriteFrame = this.losePanel;
         }
 
         var teamAScore = cc.sys.localStorage.getItem('teamAScore');
