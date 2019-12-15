@@ -38,11 +38,11 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        this.volume = cc.sys.localStorage.getItem("sfxVol");
+
     },
 
     playClip() {
-        cc.audioEngine.play(this.audioClip, false, this.volume);
+        cc.audioEngine.play(this.audioClip, false, 1);
     }
 
     // update (dt) {},

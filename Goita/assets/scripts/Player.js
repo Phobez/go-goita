@@ -227,8 +227,9 @@ cc.Class({
                 }
             } else { // attacking
                 for (var i = 0; i < this.hand.length; i++) {
+                    // TODO: only allow player to play king if KING HAS DEFENDED AND it's now player's last piece
                     // if king has defended, activate all pieces
-                    if (this.hand.length == 1 && this.gameManager.getComponent('GameManager').kingHasDefended) {
+                    if (this.gameManager.getComponent('GameManager').kingHasDefended) {
                         if (this.handBoard != null) {
                             this.handBoard.getComponent('HandBoard').activatePiece(this.hand[i].index);
                         }
