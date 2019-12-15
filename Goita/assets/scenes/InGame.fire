@@ -4849,7 +4849,7 @@
       "__id__": 125
     },
     "_enabled": true,
-    "fadeOutDelay": 2,
+    "fadeOutDelay": 1.5,
     "_id": "2ceYNMER1F7aDUe72YA5V+"
   },
   {
@@ -7093,8 +7093,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": -280,
-      "y": 120,
+      "x": -310,
+      "y": 130,
       "z": 0
     },
     "_scale": {
@@ -7408,8 +7408,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 280,
-      "y": 120,
+      "x": 310,
+      "y": 130,
       "z": 0
     },
     "_scale": {
