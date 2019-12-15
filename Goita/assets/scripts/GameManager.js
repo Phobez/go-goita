@@ -47,9 +47,25 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        roundEndPanel: {
+            default: null,
+            type: cc.Node
+        },
+        roundEndLabel: {
+            default: null,
+            type: cc.Node
+        },
+        roundEndScoreLabel: {
+            default: null,
+            type: cc.Node
+        },
         timerLabel: {
             default: null,
             type: cc.Label
+        },
+        startRoundAudioClip: {
+            default: null,
+            type: cc.AudioClip
         },
         timerTime: 30,
         kingHasDefended: false
@@ -212,6 +228,8 @@ cc.Class({
         this.startTimer();
         console.log("CURRENT PLAYER INDEX: " + this.currentPlayerIndex);
         console.log("FIRST PLAYER INDEX: " + this.firstPlayerIndex);
+        var volume = cc.sys.localStorage.getItem("sfxVol");
+        cc.audioEngine.play(this.startRoundAudioClip, false, volume);
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
     },
 
@@ -324,7 +342,21 @@ cc.Class({
                 this.players[i].destroy();
             }
             console.log("INGAME");
-            cc.director.loadScene(cc.director.getScene().name);
+
+            if (winnerIndex == 0) {
+                this.roundEndLabel.getComponent(cc.Label).string = 'YOUR TEAM WON';
+                this.roundEndScoreLabel.getComponent(cc.Label).string = this.teamAScore;
+            } else if (winnerIndex == 1) {
+                this.roundEndLabel.getComponent(cc.Label).string = 'ENEMY TEAM WON';
+                this.roundEndScoreLabel.getComponent(cc.Label).string = this.teamBScore;
+            }
+
+            this.roundEndPanel.active = true;
+
+            this.scheduleOnce(function() {
+                cc.director.loadScene(cc.director.getScene().name);
+            }, 2);
+            
         }
     },
 

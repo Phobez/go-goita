@@ -46,6 +46,7 @@ cc.Class({
         }
         this.node.active = true;
 
+        this.unscheduleAllCallbacks();
         this.scheduleOnce(function() {
             this.deactivate();
         }, this.fadeOutDelay);
