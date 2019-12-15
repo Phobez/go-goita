@@ -45,10 +45,6 @@ cc.Class({
             default: null,
             type: cc.Button
         },
-        putPieceAudioClip: {
-            default: null,
-            type: cc.AudioClip
-        },
         hand: [],
         handHasBeenFilled: false,
         isDefending: true
@@ -122,8 +118,6 @@ cc.Class({
         console.log(this.node.name + ": put piece " + pieceType);
         // put piece on board
         this.board.getComponent('Board').addPieceToBoard(this.isFlipped, pieceType);
-        var volume = cc.sys.localStorage.getItem("sfxVol");
-        cc.audioEngine.play(this.putPieceAudioClip, false, volume);
 
         // remove piece from hand
         // for (var i = 0; i < this.hand.length; i++) {
