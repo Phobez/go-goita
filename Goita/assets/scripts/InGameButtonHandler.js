@@ -41,21 +41,6 @@ cc.Class({
 
     },
 
-    loadScene(event, sceneName) {
-        if (sceneName == 'InGame') {
-            cc.sys.localStorage.setItem('hasEndedRoundBefore', false);
-            cc.sys.localStorage.setItem('firstPlayerIndex', -1);
-            cc.sys.localStorage.setItem('teamAScore', 0);
-            cc.sys.localStorage.setItem('teamBScore', 0);
-            cc.sys.localStorage.setItem('winner', 0);
-        }
-        cc.director.loadScene(sceneName);
-    },
-
-    quitGame() {
-        cc.game.end();
-    },
-
     playClip() {
         cc.audioEngine.play(this.audioClip, false, 1);
     }
