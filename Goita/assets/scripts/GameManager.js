@@ -43,6 +43,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        turnPromptLabel: {
+            default: null,
+            type: cc.Node
+        },
         timerLabel: {
             default: null,
             type: cc.Label
@@ -172,8 +176,10 @@ cc.Class({
         // if everyone else passes
         if (this.passCounter == 3) {
             this.passCounter = 0;
+            this.turnPromptLabel.getComponent('TurnPromptHandler').activate(this.currentPlayerIndex);
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
+            this.turnPromptLabel.getComponent('TurnPromptHandler').activate(this.currentPlayerIndex);
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }
         
@@ -191,9 +197,11 @@ cc.Class({
         // NOTE: this if shouldn't be possible
         if (this.passCounter == 3) {
             this.passCounter = 0;
+            this.turnPromptLabel.getComponent('TurnPromptHandler').activate(this.currentPlayerIndex);
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
         } else {
             this.passCounter = 0;
+            this.turnPromptLabel.getComponent('TurnPromptHandler').activate(this.currentPlayerIndex);
             this.players[this.currentPlayerIndex].getComponent('Player').startPlayerTurn(false, this.lastAttackPieceType);
         }   
     },
