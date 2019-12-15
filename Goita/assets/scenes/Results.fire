@@ -1243,7 +1243,7 @@
     },
     "component": "",
     "_componentId": "e12b4jWr2JDKbY+DFmWQ8TZ",
-    "handler": "schedule",
+    "handler": "returnToMainMenu",
     "customEventData": ""
   },
   {

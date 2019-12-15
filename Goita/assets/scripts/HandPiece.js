@@ -116,5 +116,11 @@ cc.Class({
         this.getComponent(cc.Button).interactable = false;
     },
 
+    activate() {
+        if (this.spriteComponent.spriteFrame != null) {
+            this.getComponent(cc.Button).interactable = true;
+        }
+    }
+
     // update (dt) {},
 });

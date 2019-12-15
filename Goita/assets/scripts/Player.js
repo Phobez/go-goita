@@ -275,9 +275,9 @@ cc.Class({
                             } else { // else pass
                                 console.log(this.node.name + " passes.");
                                 this.gameManager.getComponent('GameManager').passTurn();
+                                return;
                             }
                         }
-                        return;
                     }
                 }
 
@@ -317,12 +317,14 @@ cc.Class({
             } else {
                 for (var i = 0; i < this.hand.length; i++) {
                     if (this.hand[i].type == 'king') {
-                        if (this.gameManager.getComponent('GameManager').kingHasDefended) {
-                            var temp = this.hand[i].type;
-                            this.hand.splice(i, 1);
-                            this.putPiece(temp, -1);
-                            this.debugPrintHand();
-                            break;
+                        if (this.hand.length == 1) {
+                            if (this.gameManager.getComponent('GameManager').kingHasDefended) {
+                                var temp = this.hand[i].type;
+                                this.hand.splice(i, 1);
+                                this.putPiece(temp, -1);
+                                this.debugPrintHand();
+                                break;
+                            }
                         }
                     } else {
                         var temp = this.hand[i].type;

@@ -113,7 +113,7 @@ cc.Class({
     },
 
     activatePiece(index) {
-        this.pieces[index].getComponent(cc.Button).interactable = true;
+        this.pieces[index].getComponent('HandPiece').activate();
     },
 
     deactivateAllPieces() {
@@ -124,7 +124,7 @@ cc.Class({
 
     activateAllPieces() {
         for (var i = 0; i < 8; i++) {
-            this.pieces[i].getComponent(cc.Button).interactable = true;
+            this.pieces[i].getComponent('HandPiece').activate();
         }
     }
 });
