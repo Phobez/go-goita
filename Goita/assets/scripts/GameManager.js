@@ -310,7 +310,7 @@ cc.Class({
                 if (roundWinner.name == this.players[i].name) {
                     if (i % 2 == 0) {
                         this.teamAScore += roundPoints;
-                        console.log
+                        // console.log
                     } else {
                         this.teamBScore += roundPoints;
                     }
@@ -327,6 +327,7 @@ cc.Class({
 
     // checks points and determines if game has ended
     checkPoints(winnerIndex) {
+        // console.log("Winner: " + winnerIndex);
         // update score
         this.updateScore();
 
@@ -343,10 +344,10 @@ cc.Class({
             }
             console.log("INGAME");
 
-            if (winnerIndex == 0) {
+            if (winnerIndex % 2 == 0) {
                 this.roundEndLabel.getComponent(cc.Label).string = 'YOUR TEAM WON';
                 this.roundEndScoreLabel.getComponent(cc.Label).string = this.teamAScore;
-            } else if (winnerIndex == 1) {
+            } else if (winnerIndex % 2 == 1) {
                 this.roundEndLabel.getComponent(cc.Label).string = 'ENEMY TEAM WON';
                 this.roundEndScoreLabel.getComponent(cc.Label).string = this.teamBScore;
             }
