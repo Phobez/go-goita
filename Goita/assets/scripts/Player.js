@@ -119,7 +119,7 @@ cc.Class({
     },
 
     putPiece (pieceType, pieceIndex) {
-        console.log(this.node.name + ": put piece " + pieceType);
+        // console.log(this.node.name + ": put piece " + pieceType);
         // put piece on board
         this.board.getComponent('Board').addPieceToBoard(this.isFlipped, pieceType);
         var volume = cc.sys.localStorage.getItem("sfxVol");
@@ -278,7 +278,7 @@ cc.Class({
                                 this.debugPrintHand();
                                 this.putPiece(temp, -1);
                             } else { // else pass
-                                console.log(this.node.name + " passes.");
+                                // console.log(this.node.name + " passes.");
                                 this.gameManager.getComponent('GameManager').passTurn();
                                 return;
                             }
@@ -315,7 +315,7 @@ cc.Class({
                     }
 
                     if (noAvailablePiece) {
-                        console.log(this.node.name + " passes.");
+                        // console.log(this.node.name + " passes.");
                         this.gameManager.getComponent('GameManager').passTurn();
                     }
                 }
@@ -351,7 +351,7 @@ cc.Class({
                 debugPrint += ", ";
             }
         }
-        console.log(debugPrint);
+        // console.log(debugPrint);
     },
     
     chooseRandomPiece(){

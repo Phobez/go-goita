@@ -126,7 +126,7 @@ cc.Class({
                 this.deck.splice(randomIndex, 1);
             }
             this.players[i].getComponent('Player').debugPrintHand();
-            console.log("PAWNS: " + pawnCounter);
+            // console.log("PAWNS: " + pawnCounter);
         }
     },
 
@@ -226,8 +226,8 @@ cc.Class({
         this.shuffleDeck();
         this.currentPlayerIndex = this.firstPlayerIndex;
         this.startTimer();
-        console.log("CURRENT PLAYER INDEX: " + this.currentPlayerIndex);
-        console.log("FIRST PLAYER INDEX: " + this.firstPlayerIndex);
+        // console.log("CURRENT PLAYER INDEX: " + this.currentPlayerIndex);
+        // console.log("FIRST PLAYER INDEX: " + this.firstPlayerIndex);
         var volume = cc.sys.localStorage.getItem("sfxVol");
         cc.audioEngine.play(this.startRoundAudioClip, false, volume);
         this.players[this.firstPlayerIndex].getComponent('Player').startPlayerTurn(true, '');
@@ -310,7 +310,6 @@ cc.Class({
                 if (roundWinner.name == this.players[i].name) {
                     if (i % 2 == 0) {
                         this.teamAScore += roundPoints;
-                        // console.log
                     } else {
                         this.teamBScore += roundPoints;
                     }
@@ -342,7 +341,7 @@ cc.Class({
             for (var i = 0; i < 4; i++) {
                 this.players[i].destroy();
             }
-            console.log("INGAME");
+            // console.log("INGAME");
 
             if (winnerIndex % 2 == 0) {
                 this.roundEndLabel.getComponent(cc.Label).string = 'YOUR TEAM WON';
@@ -363,8 +362,8 @@ cc.Class({
 
     // updates score labels
     updateScore() {
-        console.log("TEAM A SCORE: " + this.teamAScore);
-        console.log("TEAM B SCORE: " + this.teamBScore);
+        // console.log("TEAM A SCORE: " + this.teamAScore);
+        // console.log("TEAM B SCORE: " + this.teamBScore);
         this.teamAScoreLabel.string = this.teamAScore.toString();
         this.teamBScoreLabel.string = this.teamBScore.toString();
         
@@ -392,7 +391,7 @@ cc.Class({
             cc.sys.localStorage.setItem('winner', 2);
         }
 
-        console.log("RESULTS");
+        // console.log("RESULTS");
         this.scheduleOnce(function() {
             cc.director.loadScene('Results');
         }, 2);
@@ -413,7 +412,7 @@ cc.Class({
                 this.timerLabel.string = this.timerTime;
                 if (this.players[0].getComponent('Player').isDefending){
                     if (this.timer <= 0) {
-                        console.log(this.players[0].getComponent('Player').isDefending);
+                        // console.log(this.players[0].getComponent('Player').isDefending);
                         this.passTurn();
                     }
                 } else {
