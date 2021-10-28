@@ -165,7 +165,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 393.1755333181352
+      "z": 374.988999838662
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -3797,8 +3797,8 @@
       }
     ],
     "_useOriginalSize": true,
-    "_string": "The \"King\" piece can defend against Knights, Silver and Gold Generals,  Bishops, and Rooks.\n\nAfter defending, the player must play an \"Attack\" piece. This piece can be anything except \"King\".\n\nIf 3 players pass, the final attacking player doesn't defend. They choose a piece to discard and then attack again.",
-    "_N$string": "The \"King\" piece can defend against Knights, Silver and Gold Generals,  Bishops, and Rooks.\n\nAfter defending, the player must play an \"Attack\" piece. This piece can be anything except \"King\".\n\nIf 3 players pass, the final attacking player doesn't defend. They choose a piece to discard and then attack again.",
+    "_string": "The \"King\" piece can defend against Knights, Silver and Gold Generals, Bishops, and Rooks.\n\nAfter defending, the player must play an \"Attack\" piece. This piece can be anything except \"King\".\n\nIf 3 players pass, the final attacking player doesn't defend. They choose a piece to discard and then attack again.",
+    "_N$string": "The \"King\" piece can defend against Knights, Silver and Gold Generals, Bishops, and Rooks.\n\nAfter defending, the player must play an \"Attack\" piece. This piece can be anything except \"King\".\n\nIf 3 players pass, the final attacking player doesn't defend. They choose a piece to discard and then attack again.",
     "_fontSize": 30,
     "_lineHeight": 40,
     "_enableWrapText": true,
