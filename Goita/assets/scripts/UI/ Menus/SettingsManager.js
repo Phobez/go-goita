@@ -47,28 +47,16 @@ cc.Class({
 
     start () {
         const masterVolume = cc.sys.localStorage.getItem("masterVol");
-        
-        if (masterVolume === null) {
-            cc.sys.localStorage.setItem("masterVol", 1);
-        } else {
-            this.masterVolumeBar.progress = masterVolume;
-        }
+
+        this.masterVolumeBar.progress = masterVolume;
 
         const bgmVolume = cc.sys.localStorage.getItem("bgmVol");
 
-        if (bgmVolume === null) {
-            cc.sys.localStorage.setItem("bgmVol", 1);
-        } else {
-            this.bgmVolumeBar.progress = bgmVolume / masterVolume;
-        }
+        this.bgmVolumeBar.progress = bgmVolume / masterVolume;
 
         const sfxVolume = cc.sys.localStorage.getItem("sfxVol");
 
-        if (sfxVolume === null) {
-            cc.sys.localStorage.setItem("sfxVol", 1);
-        } else {
-            this.sfxVolumeBar.progress = sfxVolume / masterVolume;
-        }
+        this.sfxVolumeBar.progress = sfxVolume / masterVolume;
     },
 
     /**

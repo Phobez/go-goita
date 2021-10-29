@@ -27,36 +27,31 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        audioClip: {
-            default: null,
-            type: cc.AudioClip
-        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {},
 
-    // start () {},
-
-    loadScene(event, sceneName) {
-        if (sceneName === 'InGame') {
-            cc.sys.localStorage.setItem('hasEndedRoundBefore', false);
-            cc.sys.localStorage.setItem('firstPlayerIndex', -1);
-            cc.sys.localStorage.setItem('teamAScore', 0);
-            cc.sys.localStorage.setItem('teamBScore', 0);
-            cc.sys.localStorage.setItem('winner', 0);
+    start () {
+        const masterVolume = cc.sys.localStorage.getItem("masterVol");
+        
+        if (!masterVolume) {
+            cc.sys.localStorage.setItem("masterVol", 1);
         }
-        cc.director.loadScene(sceneName);
-    },
 
-    quitGame() {
-        cc.game.end();
-    },
+        const bgmVolume = cc.sys.localStorage.getItem("bgmVol");
 
-    playClip() {
-        cc.audioEngine.play(this.audioClip, false, parseFloat(cc.sys.localStorage.getItem("sfxVol")));
-    }
+        if (!bgmVolume) {
+            cc.sys.localStorage.setItem("bgmVol", 1);
+        }
+
+        const sfxVolume = cc.sys.localStorage.getItem("sfxVol");
+
+        if (!sfxVolume) {
+            cc.sys.localStorage.setItem("sfxVol", 1);
+        }
+    },
 
     // update (dt) {},
 });
