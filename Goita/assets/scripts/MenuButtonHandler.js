@@ -37,12 +37,10 @@ cc.Class({
 
     // onLoad () {},
 
-    start () {
-        this.volume = cc.sys.localStorage.getItem("sfxVol")
-    },
+    // start () {},
 
     loadScene(event, sceneName) {
-        if (sceneName == 'InGame') {
+        if (sceneName === 'InGame') {
             cc.sys.localStorage.setItem('hasEndedRoundBefore', false);
             cc.sys.localStorage.setItem('firstPlayerIndex', -1);
             cc.sys.localStorage.setItem('teamAScore', 0);
@@ -57,7 +55,7 @@ cc.Class({
     },
 
     playClip() {
-        cc.audioEngine.play(this.audioClip, false, this.volume);
+        cc.audioEngine.play(this.audioClip, false, cc.sys.localStorage.getItem("sfxVol"));
     }
 
     // update (dt) {},

@@ -46,7 +46,7 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        var masterVolume = cc.sys.localStorage.getItem("masterVol");
+        const masterVolume = cc.sys.localStorage.getItem("masterVol");
         
         if (masterVolume === null) {
             cc.sys.localStorage.setItem("masterVol", 1);
@@ -54,43 +54,49 @@ cc.Class({
             this.masterVolumeBar.progress = masterVolume;
         }
 
-        var bgmVolume = cc.sys.localStorage.getItem("bgmVol");
+        const bgmVolume = cc.sys.localStorage.getItem("bgmVol");
 
         if (bgmVolume === null) {
             cc.sys.localStorage.setItem("bgmVol", 1);
         } else {
-            this.bgmVolumeBar.progress = bgmVolume * masterVolume;
+            this.bgmVolumeBar.progress = bgmVolume / masterVolume;
         }
 
-        var sfxVolume = cc.sys.localStorage.getItem("sfxVol");
+        const sfxVolume = cc.sys.localStorage.getItem("sfxVol");
 
         if (sfxVolume === null) {
             cc.sys.localStorage.setItem("sfxVol", 1);
         } else {
-            this.sfxVolumeBar.progress = sfxVolume * masterVolume;
+            this.sfxVolumeBar.progress = sfxVolume / masterVolume;
         }
     },
 
+    /**
+     * Updates the value of the volume specified by key.
+     * If updating BGM or SFX volume, the value is multiplied by the Master volume first.
+     * 
+     * @param {cc.Slider} event - Slider which triggered the event.
+     * @param {string} key - Key of the volume to update.
+     */
     updateVolume (event, key) {
-        switch (key) {
-            case "bgmVol":
-            case "sfxVol":
-                var masterVolume = cc.sys.localStorage.getItem("masterVol");
-                if (event.progress > masterVolume) {
-                    event.progress = masterVolume;
-                }
-                break;
+        let newVol = event.progress;
+
+        if (key === "bgmVol" || key === "sfxVol") {
+            newVol *= cc.sys.localStorage.getItem("masterVol");
         }
-        cc.sys.localStorage.setItem(key, event.progress);
+
+        cc.sys.localStorage.setItem(key, newVol);
     },
 
+    /**
+     * Updates the values of the BGM and SFX volumes by multiplying their current value with the Master volume value.
+     * 
+     * @param {cc.Slider} event - Slider of the Master volume which triggered the event.
+     */
     updateSubVolumes (event) {
-        var bgmVolume = cc.sys.localStorage.getItem("bgmVol");
-        this.bgmVolumeBar.progress = bgmVolume * event.progress;
-        cc.sys.localStorage.setItem("bgmVol", this.bgmVolumeBar.progress);
-        var sfxVolume = cc.sys.localStorage.getItem("sfxVol");
-        this.sfxVolumeBar.progress = sfxVolume * event.progress;
-        cc.sys.localStorage.setItem("sfxVol", this.sfxVolumeBar.progress);
+        cc.sys.localStorage.setItem("bgmVol", this.bgmVolumeBar.progress * event.progress);
+
+        cc.sys.localStorage.setItem("sfxVol", this.sfxVolumeBar.progress * event.progress);
     }
     // update (dt) {},
 });
